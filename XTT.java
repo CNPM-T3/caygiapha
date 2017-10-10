@@ -5,12 +5,19 @@
  */
 package caygiapha;
 
+import java.sql.*;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADT
  */
 public class XTT extends javax.swing.JInternalFrame {
-
+    private String[] head={"STT","Thành tích","Số lượng"};
+    private DefaultTableModel tb=new DefaultTableModel(head,0);
     /**
      * Creates new form XTT_1
      */
@@ -29,17 +36,54 @@ public class XTT extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        jThongBao = new javax.swing.JDialog();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jcomboHovaTen = new javax.swing.JRadioButton();
+        jcomboMa = new javax.swing.JRadioButton();
+        jTenOrMa = new javax.swing.JLabel();
+        jtxTenOrMa = new javax.swing.JTextField();
+        lNgaySinh = new javax.swing.JLabel();
+        txNgaySinh = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        dsTT = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+
+        jThongBao.setMinimumSize(new java.awt.Dimension(400, 126));
+        jThongBao.setPreferredSize(new java.awt.Dimension(400, 126));
+        jThongBao.setResizable(false);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Hãy đảm bảo bạn nhập dữ liệu hợp lệ...");
+
+        jButton3.setText("Đồng ý");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jThongBaoLayout = new javax.swing.GroupLayout(jThongBao.getContentPane());
+        jThongBao.getContentPane().setLayout(jThongBaoLayout);
+        jThongBaoLayout.setHorizontalGroup(
+            jThongBaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jThongBaoLayout.createSequentialGroup()
+                .addGap(230, 230, 230)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jThongBaoLayout.setVerticalGroup(
+            jThongBaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jThongBaoLayout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setClosable(true);
         setTitle("Xem Thành Tích");
@@ -50,61 +94,78 @@ public class XTT extends javax.swing.JInternalFrame {
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Tìm theo tên và ngày sinh");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jcomboHovaTen);
+        jcomboHovaTen.setSelected(true);
+        jcomboHovaTen.setText("Tìm theo tên và ngày sinh");
+        jcomboHovaTen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                jcomboHovaTenActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Tìm theo mã");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jcomboMa);
+        jcomboMa.setText("Tìm theo mã");
+        jcomboMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                jcomboMaActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Tên thành viên");
+        jTenOrMa.setText("Tên thành viên");
 
-        jLabel3.setText("Ngày sinh");
+        lNgaySinh.setText("Ngày sinh");
 
         jButton1.setText("Tìm");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dsTT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "STT", "Thành tích", "Ngày phát sinh", "Số lượng"
+                "STT", "Thành tích", "Số lượng"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(dsTT);
+        if (dsTT.getColumnModel().getColumnCount() > 0) {
+            dsTT.getColumnModel().getColumn(0).setMinWidth(20);
+            dsTT.getColumnModel().getColumn(0).setPreferredWidth(40);
+            dsTT.getColumnModel().getColumn(0).setMaxWidth(60);
+        }
 
         jButton2.setText("Đóng");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -122,17 +183,17 @@ public class XTT extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(jTenOrMa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
-                        .addComponent(jLabel3))
+                        .addComponent(lNgaySinh))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(jcomboHovaTen)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton2)))
+                        .addComponent(jcomboMa)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 42, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
@@ -151,14 +212,14 @@ public class XTT extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(jcomboHovaTen)
+                    .addComponent(jcomboMa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTenOrMa)
+                    .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lNgaySinh)
+                    .addComponent(txNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -171,38 +232,88 @@ public class XTT extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void jcomboHovaTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcomboHovaTenActionPerformed
         // TODO add your handling code here:
-        jLabel2.setText("Tên thành viên");
-        jLabel3.setVisible(true);
-        jTextField2.setVisible(true);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+        jTenOrMa.setText("Tên thành viên");
+        lNgaySinh.setVisible(true);
+        txNgaySinh.setVisible(true);
+    }//GEN-LAST:event_jcomboHovaTenActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void jcomboMaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcomboMaActionPerformed
         // TODO add your handling code here:
-        jLabel2.setText("Mã thành viên");
-        jLabel3.setVisible(false);
-        jTextField2.setVisible(false);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+        jTenOrMa.setText("Mã thành viên");
+        lNgaySinh.setVisible(false);
+        txNgaySinh.setVisible(false);
+    }//GEN-LAST:event_jcomboMaActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        String cmd = "select LTT,[Số lượng]=count(LTT)";
+        try {
+                PreparedStatement pre;
+                ResultSet res;
+                if(jcomboHovaTen.isSelected()) {
+                    cmd+=" from TT, TV where TT.ID=TV.ID and HVT like ? and ns= ? group by LTT ";
+                    pre=SQL.getConnection().prepareStatement(cmd);
+                    pre.setString(1,jtxTenOrMa.getText());
+                    pre.setString(2,txNgaySinh.getText());
+                } else {
+                    cmd+=" from TT where ID like ? group by LTT";
+                    pre=SQL.getConnection().prepareStatement(cmd);
+                    pre.setString(1, jtxTenOrMa.getText());
+                }
+                res=pre.executeQuery(); 
+                if(res.isBeforeFirst()==true){
+                    tb.setRowCount(0);
+                    int i=1;
+                    Vector data;
+                    while(res.next()){
+                        data=new Vector();
+                        data.add(i);
+                        data.add(res.getString(1));
+                        data.add(res.getString(2));
+                        tb.addRow(data);
+                        i++;
+                    }
+                    dsTT.setModel(tb); 
+                }
+                else {
+                    jLabel2.setText("Không tìm thấy thông tin...");
+                    jThongBao.setVisible(true);
+                    return;
+                }
+        } catch (SQLException ex) {
+                    jLabel2.setText("Hãy đảm bảo bạn đã nhập thông tin hợp lệ...");
+                    jThongBao.setVisible(true);
+            }
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+        jThongBao.dispose();
+    }//GEN-LAST:event_jButton3MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTable dsTT;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel jTenOrMa;
+    private javax.swing.JDialog jThongBao;
+    private javax.swing.JRadioButton jcomboHovaTen;
+    private javax.swing.JRadioButton jcomboMa;
+    private javax.swing.JTextField jtxTenOrMa;
+    private javax.swing.JLabel lNgaySinh;
+    private javax.swing.JTextField txNgaySinh;
     // End of variables declaration//GEN-END:variables
 }
