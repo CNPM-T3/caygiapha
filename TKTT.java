@@ -24,6 +24,8 @@ public class TKTT extends javax.swing.JInternalFrame {
     public TKTT() {
         initComponents();
         setVisible(true);
+        tb.setRowCount(0);
+        TK.setModel(tb);
     }
 
     /**
@@ -35,6 +37,9 @@ public class TKTT extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jLabel6 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         tunam = new javax.swing.JTextField();
         dennam = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -46,6 +51,40 @@ public class TKTT extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Khoảng thời gian không hợp lệ");
+
+        jButton3.setText("Đóng");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(167, 167, 167)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setClosable(true);
         setTitle("Thống kê thành tích");
@@ -192,6 +231,10 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        if(dennam.getText().compareTo(tunam.getText())==-1){
+            jDialog1.setVisible(true);
+            return;
+        }
         PreparedStatement pre;
         ResultSet res;
         String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT  ";
@@ -201,6 +244,7 @@ public class TKTT extends javax.swing.JInternalFrame {
             pre.setString(1, tunam.getText());
             pre.setString(2, dennam.getText());
             res=pre.executeQuery();
+            select.compareTo(select);
             //nếu giá trị trước đó ko có trước đó
             if(res.isBeforeFirst()){
                 // vector giá trị ko biết đc
@@ -218,6 +262,9 @@ public class TKTT extends javax.swing.JInternalFrame {
                 }
                 TK.setModel(tb);
                 
+            } else {
+                tb.setNumRows(0);
+                TK.setModel(tb);
             }
         } catch (SQLException ex) {
             Logger.getLogger(TKTT.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,17 +274,25 @@ public class TKTT extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        jDialog1.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TK;
     private javax.swing.JTextField dennam;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tunam;
     // End of variables declaration//GEN-END:variables

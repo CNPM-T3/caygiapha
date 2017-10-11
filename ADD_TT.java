@@ -277,7 +277,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                 PreparedStatement pre;
                 ResultSet res=null;
             try {
-                String select="select ID, NPS, LTT from TT where ID like ? and NPS = ? LTT like ?";
+                String select="select ID, NPS, LTT from TT where ID like ? and NPS = ? and LTT like ?";
                 pre=SQL.getConnection().prepareStatement(select);
                 pre.setString(1, matv.getText());
                 pre.setString(2,ngay.getText());
