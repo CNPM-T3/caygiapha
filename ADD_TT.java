@@ -33,6 +33,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         initComponents();
         ngay.setText(df.format(date));
         model = (DefaultTableModel) bang.getModel();
+        model.setRowCount(0);
         if(Bridge.isOpen()){
             String[] data=Bridge.getData();
             matv.setText(data[0]);
@@ -274,7 +275,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     private void BThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BThemActionPerformed
                 // TODO add your handling code here
                 
-                PreparedStatement pre;
+                PreparedStatement pre=null;
                 ResultSet res=null;
             try {
                 String select="select ID, NPS, LTT from TT where ID like ? and NPS = ? and LTT like ?";
@@ -289,9 +290,13 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                     pre.setString(1, matv.getText());
                     pre.setString(2,ngay.getText());
                     pre.setString(3, Cltt.getSelectedItem().toString());
-                    if(pre.execute())
-                        model.insertRow(model.getRowCount(), new Object[]{matv.getText(),Cltt.getSelectedItem(),ngay.getText()});
-                }
+                    if(pre.executeUpdate()>0){
+                        String[] a=new String []{matv.getText(),Cltt.getSelectedItem().toString(),ngay.getText()};
+                        model.addRow(a);
+                        Lthongbao.setText("Thêm thành công!");
+                    }  
+                } else
+                        Lthongbao.setText("Thông tin này đã có!");
             } catch (SQLException ex) {
                 Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
                 Lthongbao.setText("Thêm thất bại!");
