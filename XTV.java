@@ -29,13 +29,14 @@ public class XTV extends javax.swing.JInternalFrame {
         try {
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select a.ID, a.HVT,a.NS,left(a.ID,2), b.HVT from TV a, TV b, QH c where a.ID=c.ID and b.ID=c.ID_O and c.QH like 'Con%' and a.HVT like N'"+str+"%'";
+            String cmd="select a.ID, a.HVT,a.NS,[Đời] = left(a.ID,2),(case when a.ID=b.ID and b.ID_O=c.ID and b.QH like N'Con%' then c.HVT when a.ID=b.ID and b.ID_O=c.ID and (b.QH like N'Vợ%' or b.QH like N'Chồng%') and c.ID=d.ID and d.QH like N'Con%' and d.ID_O=e.ID then e.HVT when left(a.ID,2) like '01'then '' end) from TV a, QH b, TV c, QH d, TV e where (case when a.ID=b.ID and b.ID_O=c.ID and b.QH like N'Con%' then c.HVT when a.ID=b.ID and b.ID_O=c.ID and (b.QH like N'Vợ%' or b.QH like N'Chồng%') and c.ID=d.ID and d.QH like N'Con%' and d.ID_O=e.ID then e.HVT when left(a.ID,2) like '01'then '' end) is not null and a.HVT like N'"+str+"%'";
             if(ngaySinh.getSelectedIndex()!=0)
                 cmd+=" and day(a.NS) = "+ngaySinh.getSelectedIndex();
             if(thangSinh.getSelectedIndex()!=0)
                 cmd+= " and month(a.NS) = "+thangSinh.getSelectedIndex();
             if(!namSinh.getText().isEmpty())
                 cmd+= " and year(a.NS) = "+namSinh.getText();
+            cmd+= " group by a.ID, a.HVT,a.NS,left(a.ID,2),(case when a.ID=b.ID and b.ID_O=c.ID and b.QH like N'Con%' then c.HVT when a.ID=b.ID and b.ID_O=c.ID and (b.QH like N'Vợ%' or b.QH like N'Chồng%') and c.ID=d.ID and d.QH like N'Con%' and d.ID_O=e.ID then e.HVT when left(a.ID,2) like '01'then '' end)";
             res=sta.executeQuery(cmd);
             int i=1;
             tb.setRowCount(0);
@@ -47,7 +48,10 @@ public class XTV extends javax.swing.JInternalFrame {
                     vdata.add(res.getString(2));
                     vdata.add(res.getString(3));
                     vdata.add(res.getString(4));
-                    vdata.add(res.getString(5));
+                    if(res.getString(1).charAt(0)=='0' &&res.getString(1).charAt(1)=='1')
+                        vdata.add("");
+                    else
+                        vdata.add(res.getString(5));
                     tb.addRow(vdata);
                     i++;
                 }
