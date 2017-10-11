@@ -9,12 +9,15 @@ import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author ADT
  */
 public class ADD_KT extends javax.swing.JInternalFrame {
-
+    private final String head[]={"STT","Họ và tên","Ngày sinh","Đời","Cha/mẹ"};
+    private final DefaultTableModel tb= new DefaultTableModel(head,0);
+    private String[] data;
     /**
      * Creates new form ADD_KT_1
      */
@@ -23,8 +26,8 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         setVisible(true);
         hovaten.disable();
         ngaysinh.disable();
-        
-        
+        loi.setVisible(false);
+        timtc.setVisible(false);
     }
 
     /**
@@ -36,7 +39,6 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDialog1 = new javax.swing.JDialog();
         L_ngaysinh = new javax.swing.JLabel();
         L_ngaymat = new javax.swing.JLabel();
         L_hovaten = new javax.swing.JLabel();
@@ -55,17 +57,8 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         dong = new javax.swing.JButton();
         ngaysinh = new javax.swing.JTextField();
         tim = new javax.swing.JButton();
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        loi = new javax.swing.JLabel();
+        timtc = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("Ghi Nhận Khai Tử");
@@ -139,6 +132,10 @@ public class ADD_KT extends javax.swing.JInternalFrame {
             }
         });
 
+        loi.setText("THÀNH VIÊN NÀY ĐÃ CÓ GIẤY KHAI TỬ");
+
+        timtc.setText("ĐÃ TÌM THẤY THÀNH VIÊN");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -192,7 +189,12 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                                 .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(99, 99, 99)
                                 .addComponent(tim, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(timtc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loi)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +214,11 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(tim)))
-                .addGap(39, 39, 39)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loi)
+                    .addComponent(timtc))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,8 +277,9 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private void timActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timActionPerformed
         // TODO add your handling code here:
         Statement a;
-        ResultSet r;
-        String SQL1="select hvt, ns from tv where id like '"+ matv.getText()+"'";
+        ResultSet r,r1;
+        String SQL1="select hvt, ns, id from tv where id like '"+ matv.getText()+"'";
+        String SQL2="select id from KT";
           try {
               a=SQL.getConnection().createStatement();
               r=a.executeQuery(SQL1);
@@ -280,11 +287,34 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                 r.next();
                 hovaten.setText(r.getString(1));
                 ngaysinh.setText(r.getString(2));
+                timtc.setVisible(true);
+              }
+              r1=a.executeQuery(SQL2);
+              r1.next();
+              if(matv.getText().compareTo(r1.getString(1))==0){
+                  loi.setVisible(true);
+                  ngaymat.disable();
+                  thangmat.disable();
+                  nammat.disable();
+                  diadiemmaitang.disable();
+                  nguyennhanmat.disable();
+                  timtc.setVisible(false);
+              }
+              else{
+                  loi.setVisible(false);
+                  timtc.setVisible(true);
+                  ngaymat.enable();
+                  thangmat.enable();
+                  nammat.enable();
+                  diadiemmaitang.enable();
+                  nguyennhanmat.enable();
+                  
               }
               
           } catch (SQLException ex) {
               Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
           }
+          
     }//GEN-LAST:event_timActionPerformed
 
     private void themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_themActionPerformed
@@ -314,9 +344,9 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private javax.swing.JTextField diadiemmaitang;
     private javax.swing.JButton dong;
     private javax.swing.JTextField hovaten;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel loi;
     private javax.swing.JTextField matv;
     private javax.swing.JTextField nammat;
     private javax.swing.JComboBox<String> ngaymat;
@@ -325,6 +355,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> thangmat;
     private javax.swing.JButton them;
     private javax.swing.JButton tim;
+    private javax.swing.JLabel timtc;
     private javax.swing.JLabel tua;
     // End of variables declaration//GEN-END:variables
 }
