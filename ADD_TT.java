@@ -31,7 +31,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         
     public ADD_TT() {
         initComponents();
-        ngay.setText(" " + df.format(date));
+        ngay.setText(df.format(date));
         model = (DefaultTableModel) bang.getModel();
         if(Bridge.isOpen()){
             String[] data=Bridge.getData();
@@ -142,6 +142,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
             }
         });
 
+        Cltt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Cltt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Công dân tri thức", "Công dân văn hóa", "Công dân chăm chỉ", "Công dân khỏe", "Công dân tốt bụng", "Đảng viên tri thức", "Đảng viên văn hóa", "Đảng viên chăm chỉ", "Đảng viên khỏe", "Đảng viên tốt bụng" }));
         Cltt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,9 +150,15 @@ public class ADD_TT extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Họ và tên:");
 
+        hoVaTen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Ngày sinh:");
+
+        ngaySinh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,13 +171,13 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ngay)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(Cltt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -223,7 +230,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,16 +273,25 @@ public class ADD_TT extends javax.swing.JInternalFrame {
 
     private void BThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BThemActionPerformed
                 // TODO add your handling code here
-                model.insertRow(model.getRowCount(), new Object[]{matv.getText(),Cltt.getSelectedItem(),ngay.getText()});
+                
+                PreparedStatement pre;
                 ResultSet res=null;
             try {
-                String sql="insert into TT values(?,?,?)"; 
-                PreparedStatement pre=SQL.getConnection().prepareStatement(sql);
+                String select="select ID, NPS, LTT from TT where ID like ? and NPS = ? LTT like ?";
+                pre=SQL.getConnection().prepareStatement(select);
                 pre.setString(1, matv.getText());
                 pre.setString(2,ngay.getText());
                 pre.setString(3, Cltt.getSelectedItem().toString());
-                pre.execute();
-                Lthongbao.setText("Thêm thành công!");
+                res=pre.executeQuery();
+                if(res.isBeforeFirst()==false){
+                    String sql="insert into TT values(?,?,?)"; 
+                    pre=SQL.getConnection().prepareStatement(sql);
+                    pre.setString(1, matv.getText());
+                    pre.setString(2,ngay.getText());
+                    pre.setString(3, Cltt.getSelectedItem().toString());
+                    if(pre.execute())
+                        model.insertRow(model.getRowCount(), new Object[]{matv.getText(),Cltt.getSelectedItem(),ngay.getText()});
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
                 Lthongbao.setText("Thêm thất bại!");

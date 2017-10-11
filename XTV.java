@@ -29,12 +29,12 @@ public class XTV extends javax.swing.JInternalFrame {
         try {
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select a.ID, a.HVT,a.NS,left(a.ID,2), b.HVT from TV a, TV b, QH c where a.ID=c.ID and b.ID=c.ID_O and c.QH like 'Con%' and a.ID like '"+str+"%'";
+            String cmd="select a.ID, a.HVT,a.NS,left(a.ID,2), b.HVT from TV a, TV b, QH c where a.ID=c.ID and b.ID=c.ID_O and c.QH like 'Con%' and a.HVT like N'"+str+"%'";
             if(ngaySinh.getSelectedIndex()!=0)
                 cmd+=" and day(a.NS) = "+ngaySinh.getSelectedIndex();
             if(thangSinh.getSelectedIndex()!=0)
                 cmd+= " and month(a.NS) = "+thangSinh.getSelectedIndex();
-            if(namSinh.getText().isEmpty()==false)
+            if(!namSinh.getText().isEmpty())
                 cmd+= " and year(a.NS) = "+namSinh.getText();
             res=sta.executeQuery(cmd);
             int i=1;
@@ -402,8 +402,8 @@ public class XTV extends javax.swing.JInternalFrame {
 
     private void maTVKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maTVKeyPressed
         // TODO add your handling code here:
-        
-        Select(maTV.getText());
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER)
+            Select(maTV.getText());
     }//GEN-LAST:event_maTVKeyPressed
 
     private void ngaySinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaySinhKeyPressed
