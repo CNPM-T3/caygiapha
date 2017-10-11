@@ -192,7 +192,6 @@ public class TKTT extends javax.swing.JInternalFrame {
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         if(dennam.getText().compareTo(tunam.getText())==-1){
-            
         }
         PreparedStatement pre;
         ResultSet res;
@@ -219,6 +218,9 @@ public class TKTT extends javax.swing.JInternalFrame {
                     tb.addRow(a);
                     i++;
                 }
+                String a= "select *,from TT where tunam(year)>dennam(year)";
+                if(tunam.getText().compareTo(dennam.getText())==1)
+                jLabel5.getText("không tìm thấy dữ liệu");
                 TK.setModel(tb);
                 
             }
