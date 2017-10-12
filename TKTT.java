@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.GridPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -43,7 +44,6 @@ public class TKTT extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
         setClosable(true);
@@ -113,7 +113,7 @@ public class TKTT extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel5.setText("      ..");
+        jLabel5.setText("     .................");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,11 +127,10 @@ public class TKTT extends javax.swing.JInternalFrame {
                         .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
-                                .addGap(138, 138, 138)
-                                .addComponent(jButton1))
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(jButton1)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -148,7 +147,7 @@ public class TKTT extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -159,12 +158,10 @@ public class TKTT extends javax.swing.JInternalFrame {
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jLabel4))
-                    .addComponent(jLabel5)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -175,14 +172,7 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tunamActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        
-      //      String a=TK.getValueAt(TK.getSelectedRow(),0).toString();
-       //     String b=TK.getValueAt(TK.getSelectedRow(),1).toString();
-       //     String c=TK.getValueAt(TK.getSelectedRow(),2).toString();
-      //      System.out.println(a+"  "+b+" "+c);
-      //  String[] data = new String[]{a,b,c};
-            
+        // TODO add your handling code here:        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -193,9 +183,9 @@ public class TKTT extends javax.swing.JInternalFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         if(tunam.getText().compareTo(dennam.getText())==1){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
+            jLabel5.setVisible(true);
             return;
         }
-        jLabel5.setVisible(false);
         PreparedStatement pre;
         ResultSet res;
         String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT  ";
@@ -206,6 +196,11 @@ public class TKTT extends javax.swing.JInternalFrame {
             pre.setString(2, dennam.getText());
             res=pre.executeQuery();
             select.compareTo(select);
+            tb.setRowCount(0);
+            if(res.isBeforeFirst()==false){
+                TK.setModel(tb);
+                return;
+            }
             //nếu giá trị trước đó ko có trước đó
             if(res.isBeforeFirst()){
                 // vector giá trị ko biết đc
@@ -224,12 +219,14 @@ public class TKTT extends javax.swing.JInternalFrame {
                 TK.setModel(tb);
                 
             }
+//            tb.setRowCount(0);
+//            if(res.isBeforeFirst()==false){
+//                TK.setModel(tb);
+//                
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(TKTT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+        }    
     }//GEN-LAST:event_jButton2MouseClicked
 
 
@@ -241,7 +238,6 @@ public class TKTT extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tunam;
