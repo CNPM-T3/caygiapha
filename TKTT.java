@@ -191,8 +191,11 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        if(dennam.getText().compareTo(tunam.getText())==-1){
+        if(tunam.getText().compareTo(dennam.getText())==1){
+            jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
+            return;
         }
+        jLabel5.setVisible(false);
         PreparedStatement pre;
         ResultSet res;
         String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT  ";
@@ -218,9 +221,6 @@ public class TKTT extends javax.swing.JInternalFrame {
                     tb.addRow(a);
                     i++;
                 }
-                String a= "select *,from TT where tunam(year)>dennam(year)";
-                if(tunam.getText().compareTo(dennam.getText())==1)
-                jLabel5.getText("không tìm thấy dữ liệu");
                 TK.setModel(tb);
                 
             }
