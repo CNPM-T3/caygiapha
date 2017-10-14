@@ -39,9 +39,9 @@ public class SQQNN extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         matv = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        doiqq = new javax.swing.JTextField();
+        Csqq = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        doinn = new javax.swing.JTextField();
+        Csnn = new javax.swing.JComboBox<>();
         Bxacnhan = new javax.swing.JButton();
         Ltb = new javax.swing.JLabel();
 
@@ -64,20 +64,17 @@ public class SQQNN extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Đổi quê quán");
 
-        doiqq.addActionListener(new java.awt.event.ActionListener() {
+        Csqq.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hà Nội", "Đà nẵng", "Hồ Chí Minh", "Đồng Bằng Sông Cửu Long" }));
+        Csqq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doiqqActionPerformed(evt);
+                CsqqActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText("Đổi nghề nghiệp");
 
-        doinn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doinnActionPerformed(evt);
-            }
-        });
+        Csnn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nội trợ", "Giúp việc", "Giáo viên", "Giảng viên", "Thợ rèn", "Thợ tiện", "Thợ điện", "Nhân viên văn phòng", "Bác sĩ", "Y tá", "Dược sĩ", "Điều dưỡng", "Xây dựng", "Kỹ sư tin học", "Nghệ sĩ" }));
 
         Bxacnhan.setText("XÁC NHẬN");
         Bxacnhan.addActionListener(new java.awt.event.ActionListener() {
@@ -99,22 +96,26 @@ public class SQQNN extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(Ltb, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(doiqq, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(Bxacnhan, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(doinn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(61, Short.MAX_VALUE))
+                                    .addComponent(Bxacnhan, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(69, 69, 69))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(43, 43, 43)
+                                    .addComponent(Csnn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(matv, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                .addComponent(Csqq, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,34 +128,26 @@ public class SQQNN extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(doiqq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Csqq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(doinn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(Csnn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Bxacnhan, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Ltb, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void doiqqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doiqqActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_doiqqActionPerformed
-
-    private void doinnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doinnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_doinnActionPerformed
-
     private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
         // TODO add your handling code here:
-        String sql = "update TV set QQ = N'" + doiqq.getText() +"'";
+        String sql = "update TV set QQ = N'" + Csqq.getItemAt(Csqq.getSelectedIndex()) +"'";
         String sql1= " from TV a where ID like '"+matv.getText()+"'";
-        String sql2 = "update TV set NN = N'"+ doinn.getText()+"'";
+        String sql2 = "update TV set NN = N'"+ Csnn.getItemAt(Csnn.getSelectedIndex()) +"'";
         String timma=" select ID from TV a where ID like '"+matv.getText()+"'";
         ResultSet res = null;
         try {
@@ -197,12 +190,16 @@ public class SQQNN extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_matvActionPerformed
 
+    private void CsqqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CsqqActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CsqqActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bxacnhan;
+    private javax.swing.JComboBox<String> Csnn;
+    private javax.swing.JComboBox<String> Csqq;
     private javax.swing.JLabel Ltb;
-    private javax.swing.JTextField doinn;
-    private javax.swing.JTextField doiqq;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
