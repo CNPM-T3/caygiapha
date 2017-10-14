@@ -54,6 +54,17 @@ public class TKTT extends javax.swing.JInternalFrame {
                 tunamActionPerformed(evt);
             }
         });
+        tunam.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tunamKeyPressed(evt);
+            }
+        });
+
+        dennam.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dennamKeyPressed(evt);
+            }
+        });
 
         TK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         TK.setModel(new javax.swing.table.DefaultTableModel(
@@ -166,11 +177,11 @@ public class TKTT extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/*
     private void tunamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tunamActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tunamActionPerformed
-
+*/
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:        
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -181,11 +192,12 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        if(tunam.getText().compareTo(dennam.getText())==1){
+        if(Integer.valueOf(tunam.getText()) > Integer.valueOf(dennam.getText())){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
         }
+        jLabel5.setVisible(false);
         PreparedStatement pre;
         ResultSet res;
         String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT  ";
@@ -219,17 +231,29 @@ public class TKTT extends javax.swing.JInternalFrame {
                 TK.setModel(tb);
                 
             }
-//            tb.setRowCount(0);
-//            if(res.isBeforeFirst()==false){
-//                TK.setModel(tb);
-//                
-//            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(TKTT.class.getName()).log(Level.SEVERE, null, ex);
         }    
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void tunamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tunamKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+            jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
+            jLabel5.setVisible(true);
+        }
+    }//GEN-LAST:event_tunamKeyPressed
 
+    private void dennamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dennamKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+            jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
+            jLabel5.setVisible(true);
+        }
+    }//GEN-LAST:event_dennamKeyPressed
+
+       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TK;
     private javax.swing.JTextField dennam;
