@@ -239,6 +239,7 @@ public class TKTT extends javax.swing.JInternalFrame {
 
     private void tunamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tunamKeyPressed
         // TODO add your handling code here:
+        //kt những phím nếu nhỏ hơn 0 lơn hơn 9
         if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
@@ -247,7 +248,8 @@ public class TKTT extends javax.swing.JInternalFrame {
 
     private void dennamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dennamKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+        //kt những phím nếu nhỏ hơn 0 lơn hơn 9
+            if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
         }
