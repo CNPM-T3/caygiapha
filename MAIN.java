@@ -28,7 +28,12 @@ public class MAIN extends javax.swing.JFrame {
             Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    @Override
+    public void dispose(){
+        SQL.disconnect();
+        super.dispose();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -190,6 +195,7 @@ public class MAIN extends javax.swing.JFrame {
 
         jCheckBoxMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.ALT_MASK));
         jCheckBoxMenuItem1.setText("Thống kê thành tích");
+        jCheckBoxMenuItem1.setContentAreaFilled(false);
         jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxMenuItem1ActionPerformed(evt);
@@ -278,11 +284,7 @@ public class MAIN extends javax.swing.JFrame {
         // TODO add your handling code here:
         jDesktopPane1.add(new TKTT());
     }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
-    @Override
-    public void dispose(){
-        SQL.disconnect();
-        super.dispose();
-    }
+
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
         jDesktopPane1.add(new SMT());
