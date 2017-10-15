@@ -19,8 +19,11 @@ public class Bridge {
     }
     
     static public String[] getData(){
-        gate=false;
-        return data;
+        if(gate){
+            gate=false;
+            return data;
+        }
+        return null;
     }
     
     static public boolean isOpen(){
