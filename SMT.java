@@ -6,6 +6,8 @@
 package caygiapha;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -177,11 +179,33 @@ public class SMT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         
         
+        
         String sql = "update KT set NN = N'"+C_nguyennhan.getItemAt(C_nguyennhan.getSelectedIndex())+"'";
         String sql1= " from TV a where KT.ID like '"+MaTV.getText()+"'";
         String sql2 = "update KT set NMT = N'"+C_ddmaitang.getItemAt(C_ddmaitang.getSelectedIndex())+"'";
         String sql3 = " from TV a where KT.ID like '"+MaTV.getText()+"'";
+        String timma=" select ID from TV where ID like '" + MaTV.getText() + "'";
+        ResultSet res=null;
+        try {
+            Statement ma = SQL.getConnection().createStatement();
+            res=ma.executeQuery(timma);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        if(MaTV.getText().isEmpty())
+           jLabel2.setText("Hãy nhập mã thành viên!");
+        else
+                try {
+                    if(res.isBeforeFirst());
+                    else{
+                        jLabel2.setText("Không tìm thấy người này!");
+                        jLabel2.setVisible(true);
+                        return;
+                    }
+        } catch (SQLException ex) {
+            Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
         Statement sta=SQL.getConnection().createStatement();
         sta.executeUpdate(sql+sql1);
