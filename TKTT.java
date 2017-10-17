@@ -243,6 +243,7 @@ public class TKTT extends javax.swing.JInternalFrame {
             jLabel5.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
+        }
     }//GEN-LAST:event_tunamKeyPressed
 
        
