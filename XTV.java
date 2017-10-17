@@ -21,33 +21,35 @@ public class XTV extends javax.swing.JInternalFrame {
     private final String head[]={"STT","Họ và tên","Ngày sinh","Đời","Cha/mẹ"};
     private final DefaultTableModel tb= new DefaultTableModel(head,0);
     private String[] data;
+    private int soloi;
     /**
      * Creates new form XTV_1
      */
-    
+
     void Select (String str){
         try {
+
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select *\n from TCTVien (N'"+maTV.getText()+"'";
-            
+            String cmd="select *\n from TCTVien (N'"+HVT_ThanhVien.getText()+"'";
+
             if(namSinh.getText().isEmpty())
                 cmd+=",null";
             else
-                 cmd+=','+namSinh.getText();
-            
+                 cmd+=","+Integer.valueOf(namSinh.getText());
+
             if(thangSinh.getSelectedIndex()==0)
                 cmd+=",null";
             else
-                cmd+=','+thangSinh.getSelectedItem().toString();
-            
+                cmd+=","+thangSinh.getSelectedIndex();
+
             if(ngaySinh.getSelectedIndex()==0)
                 cmd+=",null";
             else
-                cmd+=','+ngaySinh.getSelectedItem().toString();
+                cmd+=","+ngaySinh.getSelectedIndex();
 
             cmd+=") group by matv,hoten,ngsinh,doi_,CM order by matv";
-            
+
             res=sta.executeQuery(cmd);
             int i=1;
             tb.setRowCount(0);
@@ -63,19 +65,23 @@ public class XTV extends javax.swing.JInternalFrame {
                     tb.addRow(vdata);
                     i++;
                 }
-                
+
                 jTable1.setModel(tb);
             }
         } catch (SQLException ex) {
             Logger.getLogger(XTV.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public XTV() {
         initComponents();
         setVisible(true);
+        soloi=0;
     }
 
+ //   private void exit(){
+ //       this.dispose();
+ //   }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,7 +100,7 @@ public class XTV extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        maTV = new javax.swing.JTextField();
+        HVT_ThanhVien = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         ngaySinh = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
@@ -104,6 +110,7 @@ public class XTV extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        TVkhonghople = new javax.swing.JLabel();
 
         jDialog1.setTitle("Thông báo");
         jDialog1.setLocationByPlatform(true);
@@ -222,16 +229,16 @@ public class XTV extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Họ tên");
 
-        maTV.setBackground(new java.awt.Color(240, 240, 240));
-        maTV.setFocusCycleRoot(true);
-        maTV.addActionListener(new java.awt.event.ActionListener() {
+        HVT_ThanhVien.setBackground(new java.awt.Color(240, 240, 240));
+        HVT_ThanhVien.setFocusCycleRoot(true);
+        HVT_ThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maTVActionPerformed(evt);
+                HVT_ThanhVienActionPerformed(evt);
             }
         });
-        maTV.addKeyListener(new java.awt.event.KeyAdapter() {
+        HVT_ThanhVien.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                maTVKeyPressed(evt);
+                HVT_ThanhVienKeyPressed(evt);
             }
         });
 
@@ -295,6 +302,9 @@ public class XTV extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Ngày sinh:");
 
+        TVkhonghople.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        TVkhonghople.setText("Tên thành viên không hợp lệ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -308,10 +318,10 @@ public class XTV extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(maTV, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 363, Short.MAX_VALUE))
+                        .addComponent(HVT_ThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
@@ -340,8 +350,9 @@ public class XTV extends javax.swing.JInternalFrame {
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(maTV, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(HVT_ThanhVien, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,7 +363,7 @@ public class XTV extends javax.swing.JInternalFrame {
                     .addComponent(jButton2)
                     .addComponent(jLabel6)
                     .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 12, Short.MAX_VALUE)
+                .addGap(3, 20, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -378,11 +389,11 @@ public class XTV extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         jDialog1.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void maTVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maTVActionPerformed
+/*
+    private void HVT_ThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HVT_ThanhVienActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_maTVActionPerformed
-
+    }//GEN-LAST:event_HVT_ThanhVienActionPerformed
+*/
     private void ngaySinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaySinhActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ngaySinhActionPerformed
@@ -393,8 +404,8 @@ public class XTV extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Select(maTV.getText());
-        
+        Select(HVT_ThanhVien.getText());
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -412,44 +423,68 @@ public class XTV extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void maTVKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maTVKeyPressed
+    private void HVT_ThanhVienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_HVT_ThanhVienKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(maTV.getText());
-    }//GEN-LAST:event_maTVKeyPressed
+        int n=evt.getKeyChar();
+        if(n==KeyEvent.VK_ENTER){
+            Select(HVT_ThanhVien.getText());
+            return;
+        }
+        if(n<'0'||n>'9'){
+            if(soloi!=0)
+            soloi--;
+            return;
+        }
+        if((n<8&&n>127)&&(n!=27||n!=9||n!=20||n!=16||n!=17||n!=18||n!=32||n!=37||n!=38||n!=39||n!=40)){
+                TVkhonghople.setVisible(true);
+                soloi++;
+                return;
+        }
+        n=HVT_ThanhVien.getText().charAt(HVT_ThanhVien.getText().length()-1);
+        if(soloi==0){
+            TVkhonghople.setVisible(false);
+        }
+    }//GEN-LAST:event_HVT_ThanhVienKeyPressed
 
     private void ngaySinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaySinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(maTV.getText());
+            Select(HVT_ThanhVien.getText());
     }//GEN-LAST:event_ngaySinhKeyPressed
 
     private void thangSinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_thangSinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(maTV.getText());
+            Select(HVT_ThanhVien.getText());
     }//GEN-LAST:event_thangSinhKeyPressed
 
     private void namSinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_namSinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(maTV.getText());
+            Select(HVT_ThanhVien.getText());
     }//GEN-LAST:event_namSinhKeyPressed
 
     private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(maTV.getText());
+            Select(HVT_ThanhVien.getText());
     }//GEN-LAST:event_jButton2KeyPressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
+
         if(evt.getKeyChar()==KeyEvent.VK_ESCAPE)
             this.dispose();
     }//GEN-LAST:event_formKeyPressed
 
 
+    public void HVT_ThanhVienActionPerformed(java.awt.event.ActionEvent evt) {
+                
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField HVT_ThanhVien;
+    private javax.swing.JLabel TVkhonghople;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -465,7 +500,6 @@ public class XTV extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField maTV;
     private javax.swing.JTextField namSinh;
     private javax.swing.JComboBox<String> ngaySinh;
     private javax.swing.JComboBox<String> thangSinh;

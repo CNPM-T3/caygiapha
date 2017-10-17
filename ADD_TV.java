@@ -41,7 +41,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         int i=ID.length()-1;
         char[] a=ID.toCharArray();
         if(i==6){
-                a[6]++;
+                a[i]++;
             while(i>2){
                 if(a[i]==('9'+1))
                     a[i]='A';
@@ -51,6 +51,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 }
                 i--;
             }
+            System.out.println(new String(a));
         if(a[i]>'Z')
             return null;
         return new String(a);
@@ -80,9 +81,9 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         }
         else {
                 try {
-                    char[] string= Tx_MaTVC.getText().toCharArray();
-                    string[0]=Tx_MaTVC.getText().charAt(0);
-                    string[1]=(char) (Tx_MaTVC.getText().charAt(1)+1);
+                    char[] string= new char[2];
+                    string[0]=Tx_MaTVC.getText().toCharArray()[0];
+                    string[1]=(char) (Tx_MaTVC.getText().toCharArray()[1]+1);
                     if(string[1]>'9'){
                         string[0]++;
                         string[1]='0';
@@ -90,15 +91,13 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                             return null;
                     }
                     System.out.println(new String(string));
-                    char kt[]=new char[2];
-                    kt[0]=string[0];
-                    kt[1]=string[1];
-                    String ID = new String(kt);
+                    String ID = new String(string);
                     pre=SQL.getConnection().prepareStatement("select ID from TV where ID like ? and len(ID)=7 order by ID desc");
-                    pre.setString(1,ID+'%');
+                    pre.setString(1,ID+"%");
                     res=pre.executeQuery();
-                    if(res.next()==false)
+                    if(res.isBeforeFirst()==false)
                         return new String(string)+"A0001";
+                    res.next();
                     return UP_ID(res.getString("ID"));
                 } catch (SQLException ex) {
                     Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,7 +246,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             }
         });
 
-        C_NgheNghiep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn...", "Nội trợ", "Giúp việc", "Giáo viên", "Giảng viên", "Thợ rèn", "Thợ tiện", "Thợ điện", "Nhân viên văn phòng", "Bác sĩ", "Y tá", "Dược sĩ", "Điều dưỡng", "Xây dựng", "Kỹ sư tin học", "Nghệ sĩ" }));
+        C_NgheNghiep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Không", "Giúp việc", "Giáo viên", "Giảng viên", "Thợ rèn", "Thợ tiện", "Thợ điện", "Nhân viên văn phòng", "Bác sĩ", "Y tá", "Dược sĩ", "Điều dưỡng", "Xây dựng", "Kỹ sư tin học", "Nghệ sĩ" }));
 
         jLabel4.setText("Mã thành viên cũ");
 
@@ -402,17 +401,47 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
     private void Tx_MaTVCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Tx_MaTVCKeyPressed
         // TODO add your handling code here:.
-        String id= Tx_MaTVC.getText()+evt.getKeyChar();
-        if(id.length()==7||id.length()==8){
+        char chr=evt.getKeyChar();
+        if(chr==KeyEvent.VK_CONTROL || chr==KeyEvent.VK_ESCAPE || chr==KeyEvent.VK_TAB || chr== KeyEvent.VK_CAPS_LOCK || chr==KeyEvent.VK_SHIFT || chr==KeyEvent.VK_ALT || chr== KeyEvent.VK_WINDOWS || (chr>=KeyEvent.VK_F1 && chr<=KeyEvent.VK_F24) || chr==KeyEvent.VK_BACK_SPACE || (chr>=KeyEvent.VK_LEFT && chr<=KeyEvent.VK_DOWN) || chr==KeyEvent.VK_INSERT || chr==KeyEvent.VK_DELETE || chr==KeyEvent.VK_HOME || chr== KeyEvent.VK_PAGE_UP || chr== KeyEvent.VK_PAGE_DOWN || chr==KeyEvent.VK_END){
+            return;
+        }
+        
+        
+        if(chr==KeyEvent.VK_ENTER){
           Statement s;
           ResultSet r;
           String a="select HVT from TV where ID like '"+Tx_MaTVC.getText()+"'" ;
+          
             try {
                 s=SQL.getConnection().createStatement();
                 r=s.executeQuery(a);
-                if(r.isBeforeFirst()==true){
-                    r.next();
+                if(r.next()==true){
                     Tx_ThanhVienCu.setText(r.getString(1));
+                }else{
+                    Tx_ThanhVienCu.setText("");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             return;   
+        }
+       
+        
+        String id= Tx_MaTVC.getText();
+        int len=id.length();
+        if(len==6 || len==7){
+            
+          Statement s;
+          ResultSet r;
+          String a="select HVT from TV where ID like '"+Tx_MaTVC.getText()+chr+"'" ;
+          
+            try {
+                s=SQL.getConnection().createStatement();
+                r=s.executeQuery(a);
+                if(r.next()==true){
+                    Tx_ThanhVienCu.setText(r.getString(1));
+                }else{
+                    Tx_ThanhVienCu.setText("");
                 }
                
             } catch (SQLException ex) {
@@ -443,7 +472,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 s=SQL.getConnection().prepareStatement("select ID from TV where ID like '01%' order by ID desc");
                 res=s.executeQuery();
                 if(res.isBeforeFirst()==false){
-                    String sql2="insert into TV values ('01ABCXYZ',?,?,'"+ns+"',?,?,?,null)";
+                    String sql2="insert into TV values ('01ABCYZ',?,?,'"+ns+"',?,?,?,null)";
                     s=SQL.getConnection().prepareStatement(sql2);
                     s.setString(1,t);
                     s.setString(2, gt);
@@ -458,8 +487,8 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                     return;
                 }
                 String id=Get_ID();
-                String sql1="insert into QH values (?,?,?,?)";
-                String sql2="insert into TV values (?,?,?,'"+ns+"',?,?,?,null)";
+                String sql1="insert into QH values (?,?,?,?,'')";
+                String sql2="insert into TV values (?,?,?,'"+ns+"',?,?,?,'')";
                 
                 s=SQL.getConnection().prepareStatement(sql2);
                 
