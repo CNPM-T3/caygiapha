@@ -35,7 +35,6 @@ public class TKTT extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tunam = new javax.swing.JTextField();
         dennam = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         TK = new javax.swing.JTable();
@@ -45,20 +44,10 @@ public class TKTT extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        tunam = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Thống kê thành tích");
-
-        tunam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tunamActionPerformed(evt);
-            }
-        });
-        tunam.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tunamKeyPressed(evt);
-            }
-        });
 
         dennam.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -145,8 +134,8 @@ public class TKTT extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tunam, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
+                                .addComponent(tunam, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(dennam, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -158,15 +147,15 @@ public class TKTT extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tunam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel3)
                     .addComponent(dennam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(tunam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -177,11 +166,7 @@ public class TKTT extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-/*
-    private void tunamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tunamActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tunamActionPerformed
-*/
+/**/
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:        
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -236,15 +221,6 @@ public class TKTT extends javax.swing.JInternalFrame {
             Logger.getLogger(TKTT.class.getName()).log(Level.SEVERE, null, ex);
         }    
     }//GEN-LAST:event_jButton2MouseClicked
-
-    private void tunamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tunamKeyPressed
-        // TODO add your handling code here:
-        //kt những phím nếu nhỏ hơn 0 lơn hơn 9
-        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
-            jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
-            jLabel5.setVisible(true);
-        }
-    }//GEN-LAST:event_tunamKeyPressed
 
     private void dennamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dennamKeyPressed
         // TODO add your handling code here:
