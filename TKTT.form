@@ -175,6 +175,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tunam">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tunamKeyPressed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
