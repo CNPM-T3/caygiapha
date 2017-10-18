@@ -184,6 +184,7 @@ public class TKTT extends javax.swing.JInternalFrame {
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         if(Integer.valueOf(tunam.getText()) > Integer.valueOf(dennam.getText())){
+            tb.setRowCount(0);
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
