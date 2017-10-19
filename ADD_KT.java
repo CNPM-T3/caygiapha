@@ -444,3 +444,5 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private javax.swing.JLabel tua;
     // End of variables declaration//GEN-END:variables
 }
+
+wadfasdfdaf
