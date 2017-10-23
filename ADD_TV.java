@@ -38,26 +38,24 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Không đụng vào">                   
     private String UP_ID(String ID){                   
-        int i=ID.length()-1;
-        char[] a=ID.toCharArray();
+        int i=ID.length()-1; //lấy vị trí của ký tự cuối cùng trong String
+        char[] a=ID.toCharArray();  // chuyển đổi Sting thì mẳng char[] 1 chiều
         if(i==6){
-                a[i]++;
-            while(i>2){
-                if(a[i]==('9'+1))
-                    a[i]='A';
-                else if(a[i]>'Z'){
-                    a[i]='0';
-                    a[i-1]++;
+                a[i]++; //đổi thành ký tự tiếp theo
+            while(i>2){ //vòng lặp nâng ký tự
+                if(a[i]==('9'+1))   //xet ksy tự lớn hơn '9'
+                    a[i]='A';   //đổi ký tự đó thành 'A'
+                else if(a[i]>'Z'){  // xét ký tự lớn hơn 'Z'
+                    a[i]='0';       //đưa ký tự về '0'
+                    a[i-1]++;       //năng tự ký tự phía trước thàng ký tự tiếp theo
                 }
-                i--;
+                i--;                //tiếp tục xét các ký tự trước đó
             }
-            System.out.println(new String(a));
-        if(a[i]>'Z')
-            return null;
-        return new String(a);
-            
+        if(a[2]>'Z')    //xét ký tự thứ 2 trong mảng. Nếu lớn hơn 'Z'
+            return null;    // Đúng: trả về null
+        return new String(a);  //Sai: trả về chuỗi ký tự đã được nâng
         }
-        a[7]++;
+        a[7]++;         // Xét ký tự thứ 7. Phần này được thực hiện khi quan hệ là vợ hoặc chồng
         if(a[7]>'Z')
             return null;
         return new String(a);
@@ -66,25 +64,30 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     private String Get_ID(){
         ResultSet res;
         PreparedStatement pre;
-        if(C_QuanHe.getSelectedItem().toString().equals("Vợ")||C_QuanHe.getSelectedItem().toString().equals("Chồng")){
+        if(C_QuanHe.getSelectedItem().toString().equals("Vợ")||C_QuanHe.getSelectedItem().toString().equals("Chồng")){  //Xét quan hệ
             try {
+                //Tạo prepareStatement với câu lệnh tìm kiếm
                 pre=SQL.getConnection().prepareStatement("select ID from TV where ID like ? order by ID desc");
-                pre.setString(1, Tx_MaTVC.getText()+"[A-Z]");
+                // cung cấp thông tin tìm kiếm. 
+                pre.setString(1, Tx_MaTVC.getText()+"[A-Z]"); // [A-Z]: ký tự từ A đến Z
+                //thực thi lệnh tìm kiếm
                 res=pre.executeQuery();
                 if(res.next()==false)
-                    return Tx_MaTVC.getText()+'A';
-                return UP_ID(res.getString("ID"));
+                    return Tx_MaTVC.getText()+'A';  //trả về đoạn mã phát sinh có ký tự thứ 8 đc thêm vào khi câu lệnh trên không tìm ra kết quả
+                return UP_ID(res.getString("ID"));  //trả về đoạn mã phát sinh khi có kết quả từ câu lệnh
             } catch (SQLException ex) {
                 Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
                 return null;
             }
         }
         else {
+                //Phần này được thực hiên khi quan hệ được chọn là con
                 try {
-                    char[] string= new char[2];
+                    char[] string= new char[2]; //lấy đời của thành viên cũ
+                    //lấy số đời của thành viên cũ
                     string[0]=Tx_MaTVC.getText().toCharArray()[0];
                     string[1]=(char) (Tx_MaTVC.getText().toCharArray()[1]+1);
-                    if(string[1]>'9'){
+                    if(string[1]>'9'){  //Nếu ký tự đời ở hàng đơn vị lớn hơn 9
                         string[0]++;
                         string[1]='0';
                         if(string[0]>'9')
@@ -402,7 +405,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     private void Tx_MaTVCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Tx_MaTVCKeyPressed
         // TODO add your handling code here:.
         char chr=evt.getKeyChar();
-        if(chr==KeyEvent.VK_CONTROL || chr==KeyEvent.VK_ESCAPE || chr==KeyEvent.VK_TAB || chr== KeyEvent.VK_CAPS_LOCK || chr==KeyEvent.VK_SHIFT || chr==KeyEvent.VK_ALT || chr== KeyEvent.VK_WINDOWS || (chr>=KeyEvent.VK_F1 && chr<=KeyEvent.VK_F24) || chr==KeyEvent.VK_BACK_SPACE || (chr>=KeyEvent.VK_LEFT && chr<=KeyEvent.VK_DOWN) || chr==KeyEvent.VK_INSERT || chr==KeyEvent.VK_DELETE || chr==KeyEvent.VK_HOME || chr== KeyEvent.VK_PAGE_UP || chr== KeyEvent.VK_PAGE_DOWN || chr==KeyEvent.VK_END){
+        if(chr==65535 || chr==KeyEvent.VK_DELETE || chr!=KeyEvent.VK_BACK_SPACE){
             return;
         }
         
