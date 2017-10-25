@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package caygiapha;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -236,21 +237,56 @@ public class TKTT extends javax.swing.JInternalFrame {
 
     private void dennamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dennamKeyPressed
         // TODO add your handling code here:
-        //kt những phím nếu nhỏ hơn 0 lơn hơn 9
-            if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+        char chr=evt.getKeyChar();
+        String nam=dennam.getText();
+        int limit=nam.length();
+        if(chr==65535 || chr==127 || chr==27 || chr==10){
+            return;
+        }  
+        if(chr==KeyEvent.VK_BACK_SPACE){
+            if((limit-1)<1 || (limit-1)==4){
+                jLabel5.setVisible(false);
+                return;
+            }
+        }
+        if((limit+1)>4){
+            jLabel5.setVisible(true);
+            jLabel5.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            return;
+        }
+        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){//kt những phím nếu nhỏ hơn 0 lơn hơn 9
             jLabel5.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
         }
+        jLabel5.setVisible(false);
     }//GEN-LAST:event_dennamKeyPressed
 
     private void tunamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tunamKeyPressed
         // TODO add your handling code here:
+        char chr=evt.getKeyChar();
+        String nam=tunam.getText();
+        int limit=nam.length();
+        if(chr==65535 || chr==127 || chr==27 || chr==10){
+            return;
+        }  
+        if(chr==8){
+            if((limit-1)<1 || (limit-1)==4){
+                jLabel5.setVisible(false);
+                return;
+            }
+        }
+        if((limit+1)>4){
+            jLabel5.setVisible(true);
+            jLabel5.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            return;
+        }
         if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
             jLabel5.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
         }
+        jLabel5.setVisible(false);
     }//GEN-LAST:event_tunamKeyPressed
 
        
