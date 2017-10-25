@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.layout.GridPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -16,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TKTT extends javax.swing.JInternalFrame {
     // tạo bảng table cho khung
-        String a[]=new String[] {"STT","Loại thành tích","Số lượng"};
-        DefaultTableModel tb=new DefaultTableModel(a,0);
+        DefaultTableModel tb;
     /**
      * Creates new form TKTT_1
      */
     public TKTT() {
         initComponents();
+        this.tb = (DefaultTableModel) TK.getModel();
         setVisible(true);
     }
 
@@ -133,8 +132,8 @@ public class TKTT extends javax.swing.JInternalFrame {
                         .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
@@ -183,8 +182,14 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        if(Integer.valueOf(tunam.getText()) > Integer.valueOf(dennam.getText())){
-            tb.setRowCount(0);
+        int nambd=1700;
+        int namkt=9999;
+        if(tunam.getText().isEmpty()==false)
+            nambd=Integer.valueOf(tunam.getText());
+        if(dennam.getText().isEmpty()==false)
+            namkt=Integer.valueOf(dennam.getText());
+        tb.setRowCount(0);
+        if(nambd > namkt){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
             return;
@@ -200,7 +205,6 @@ public class TKTT extends javax.swing.JInternalFrame {
             pre.setString(2, dennam.getText());
             res=pre.executeQuery();
             select.compareTo(select);
-            tb.setRowCount(0);
             if(res.isBeforeFirst()==false){
                 TK.setModel(tb);
                 return;
@@ -211,7 +215,6 @@ public class TKTT extends javax.swing.JInternalFrame {
                 Vector a;
                 int i=1;
                 //chèn dòng đếm
-                tb.setRowCount(0);
                 while(res.next()){
                     a=new Vector();
                     a.add(i);
@@ -220,11 +223,14 @@ public class TKTT extends javax.swing.JInternalFrame {
                     tb.addRow(a);
                     i++;
                 }
-                TK.setModel(tb);
+//                TK.setModel(tb);
             }
             
         } catch (SQLException ex) {
             Logger.getLogger(TKTT.class.getName()).log(Level.SEVERE, null, ex);
+            tb.setRowCount(0);
+            jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
+            jLabel5.setVisible(true);
         }    
     }//GEN-LAST:event_jButton2MouseClicked
 

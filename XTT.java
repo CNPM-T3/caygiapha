@@ -17,12 +17,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class XTT extends javax.swing.JInternalFrame {
     private String[] head={"STT","Thành tích","Số lượng"};
-    private DefaultTableModel tb=new DefaultTableModel(head,0);
+    private DefaultTableModel tb;
     /**
      * Creates new form XTT_1
      */
     public XTT() {
         initComponents();
+        tb= (DefaultTableModel) dsTT.getModel();
         setVisible(true);
     }
 
@@ -200,6 +201,7 @@ public class XTT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         String cmd = "select LTT,[Số lượng]=count(LTT)";
         try {
+                jThongBao.setVisible(false);
                 PreparedStatement pre;
                 ResultSet res;
                 cmd+=" from TT where ID like ? group by LTT";
@@ -218,7 +220,7 @@ public class XTT extends javax.swing.JInternalFrame {
                         tb.addRow(data);
                         i++;
                     }
-                    dsTT.setModel(tb); 
+//                    dsTT.setModel(tb); 
                 }
                 else {
                     jLabel2.setText("Không tìm thấy thông tin...");
