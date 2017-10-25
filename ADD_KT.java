@@ -31,14 +31,20 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     DefaultTableModel model;
     public ADD_KT() {
         initComponents();
-        setVisible(true);
-        hovaten.disable();
-        ngaysinh.disable();
+        if(Bridge.isOpen()){
+            String[] data=Bridge.getData();
+            matv.setText(data[0]);
+            hovaten.setText(data[1]);
+            ngaysinh.setText(data[2]);
+            matv.setEditable(false);
+        }
+        hovaten.setEditable(false);
+        ngaysinh.setEditable(false);
         timtc.setVisible(false);
         them.setEnabled(false);
         baoloi.setVisible(false);
         Date n=new Date();
-        
+        setVisible(true);
     }
 
     /**
@@ -326,7 +332,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         String SQL1="select hvt, ns, id "
                 + "from tv where id like '"+ matv.getText()+"'";
         //tìm id của những người đã có giấy khai tử
-        String SQL2="select id from KT";
+        String SQL2="select id from KT where id like '"+matv.getText()+"'";
         try {
               a=SQL.getConnection().createStatement();
               r=a.executeQuery(SQL1);

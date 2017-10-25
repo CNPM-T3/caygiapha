@@ -40,19 +40,14 @@ public class XTT extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jcomboHovaTen = new javax.swing.JRadioButton();
-        jcomboMa = new javax.swing.JRadioButton();
         jTenOrMa = new javax.swing.JLabel();
         jtxTenOrMa = new javax.swing.JTextField();
-        lNgaySinh = new javax.swing.JLabel();
-        txNgaySinh = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dsTT = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
 
         jThongBao.setMinimumSize(new java.awt.Dimension(400, 126));
-        jThongBao.setPreferredSize(new java.awt.Dimension(400, 126));
         jThongBao.setResizable(false);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -94,26 +89,7 @@ public class XTT extends javax.swing.JInternalFrame {
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        buttonGroup1.add(jcomboHovaTen);
-        jcomboHovaTen.setSelected(true);
-        jcomboHovaTen.setText("Tìm theo tên và ngày sinh");
-        jcomboHovaTen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcomboHovaTenActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jcomboMa);
-        jcomboMa.setText("Tìm theo mã");
-        jcomboMa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcomboMaActionPerformed(evt);
-            }
-        });
-
-        jTenOrMa.setText("Tên thành viên");
-
-        lNgaySinh.setText("Ngày sinh");
+        jTenOrMa.setText("Mã thành viên");
 
         jButton1.setText("Tìm");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -178,23 +154,7 @@ public class XTT extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTenOrMa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(lNgaySinh))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jcomboHovaTen)
-                        .addGap(18, 18, 18)
-                        .addComponent(jcomboMa)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 42, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,48 +163,33 @@ public class XTT extends javax.swing.JInternalFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(jTenOrMa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcomboHovaTen)
-                    .addComponent(jcomboMa))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTenOrMa)
-                    .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lNgaySinh)
-                    .addComponent(txNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jcomboHovaTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcomboHovaTenActionPerformed
-        // TODO add your handling code here:
-        jTenOrMa.setText("Tên thành viên");
-        lNgaySinh.setVisible(true);
-        txNgaySinh.setVisible(true);
-    }//GEN-LAST:event_jcomboHovaTenActionPerformed
-
-    private void jcomboMaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcomboMaActionPerformed
-        // TODO add your handling code here:
-        jTenOrMa.setText("Mã thành viên");
-        lNgaySinh.setVisible(false);
-        txNgaySinh.setVisible(false);
-    }//GEN-LAST:event_jcomboMaActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -257,16 +202,9 @@ public class XTT extends javax.swing.JInternalFrame {
         try {
                 PreparedStatement pre;
                 ResultSet res;
-                if(jcomboHovaTen.isSelected()) {
-                    cmd+=" from TT, TV where TT.ID=TV.ID and HVT like ? and ns= ? group by LTT ";
-                    pre=SQL.getConnection().prepareStatement(cmd);
-                    pre.setString(1,jtxTenOrMa.getText());
-                    pre.setString(2,txNgaySinh.getText());
-                } else {
-                    cmd+=" from TT where ID like ? group by LTT";
-                    pre=SQL.getConnection().prepareStatement(cmd);
-                    pre.setString(1, jtxTenOrMa.getText());
-                }
+                cmd+=" from TT where ID like ? group by LTT";
+                pre=SQL.getConnection().prepareStatement(cmd);
+                pre.setString(1, jtxTenOrMa.getText());
                 res=pre.executeQuery(); 
                 if(res.isBeforeFirst()==true){
                     tb.setRowCount(0);
@@ -310,10 +248,6 @@ public class XTT extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jTenOrMa;
     private javax.swing.JDialog jThongBao;
-    private javax.swing.JRadioButton jcomboHovaTen;
-    private javax.swing.JRadioButton jcomboMa;
     private javax.swing.JTextField jtxTenOrMa;
-    private javax.swing.JLabel lNgaySinh;
-    private javax.swing.JTextField txNgaySinh;
     // End of variables declaration//GEN-END:variables
 }

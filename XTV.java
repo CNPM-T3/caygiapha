@@ -18,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
  * @author ADT
  */
 public class XTV extends javax.swing.JInternalFrame {
-    private final String head[]={"STT","Họ và tên","Ngày sinh","Đời","Cha/mẹ"};
-    private final DefaultTableModel tb= new DefaultTableModel(head,0);
     private String[] data;
     private int soloi;
     /**
@@ -28,10 +26,10 @@ public class XTV extends javax.swing.JInternalFrame {
 
     void Select (String str){
         try {
-
+            DefaultTableModel tb= (DefaultTableModel) jTable1.getModel();
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select *\n from TCTVien (N'"+HVT_ThanhVien.getText()+"'";
+            String cmd="select * from TCTVien (N'"+HVT_ThanhVien.getText()+"'";
 
             if(namSinh.getText().isEmpty())
                 cmd+=",null";
@@ -51,23 +49,13 @@ public class XTV extends javax.swing.JInternalFrame {
             cmd+=") group by matv,hoten,ngsinh,doi_,CM order by matv";
 
             res=sta.executeQuery(cmd);
-            int i=1;
+            int i=0;
             tb.setRowCount(0);
-            if(res.isBeforeFirst()==true){
-                Vector vdata;
+//            if(res.isBeforeFirst()==true){
                 while(res.next()){
-                    vdata= new Vector();
-                    vdata.add(res.getString(1));
-                    vdata.add(res.getString(2));
-                    vdata.add(res.getString(3));
-                    vdata.add(res.getString(4));
-                    vdata.add(res.getString(5));
-                    tb.addRow(vdata);
-                    i++;
+                    Object[] Odata=new Object[] {res.getString(1),res.getString(2),res.getString(3),res.getString(4),res.getString(5)};
+                    tb.addRow(Odata);
                 }
-
-                jTable1.setModel(tb);
-            }
         } catch (SQLException ex) {
             Logger.getLogger(XTV.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,9 +96,10 @@ public class XTV extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         namSinh = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        But_ADDTT = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         TVkhonghople = new javax.swing.JLabel();
+        But_ADDKT = new javax.swing.JButton();
 
         jDialog1.setTitle("Thông báo");
         jDialog1.setLocationByPlatform(true);
@@ -195,7 +184,7 @@ public class XTV extends javax.swing.JInternalFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -293,10 +282,10 @@ public class XTV extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton4.setText("Thêm thành tích");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        But_ADDTT.setText("Thêm thành tích");
+        But_ADDTT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                But_ADDTTActionPerformed(evt);
             }
         });
 
@@ -304,6 +293,13 @@ public class XTV extends javax.swing.JInternalFrame {
 
         TVkhonghople.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         TVkhonghople.setText("Tên thành viên không hợp lệ");
+
+        But_ADDKT.setText("Ghi nhận tử");
+        But_ADDKT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                But_ADDKTMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -322,7 +318,9 @@ public class XTV extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(But_ADDTT)
+                        .addGap(18, 18, 18)
+                        .addComponent(But_ADDKT)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -373,7 +371,9 @@ public class XTV extends javax.swing.JInternalFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(But_ADDTT)
+                            .addComponent(But_ADDKT))))
                 .addContainerGap())
         );
 
@@ -408,20 +408,20 @@ public class XTV extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void But_ADDTTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ADDTTActionPerformed
         // TODO add your handling code here:
         try {
             String a=jTable1.getValueAt(jTable1.getSelectedRow(),0).toString();
             String b=jTable1.getValueAt(jTable1.getSelectedRow(),1).toString();
             String c=jTable1.getValueAt(jTable1.getSelectedRow(),2).toString();
-            System.out.println(a+"  "+b+" "+c);
+//            System.out.println(a+"  "+b+" "+c);
             data=new String[]{a,b,c};
             Bridge.setData(data);
             MAIN.a.getJDesktop().add(new ADD_TT());
         } catch (Exception e) {
             jDialog1.setVisible(true);
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_But_ADDTTActionPerformed
 
     private void HVT_ThanhVienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_HVT_ThanhVienKeyPressed
         // TODO add your handling code here:
@@ -477,18 +477,36 @@ public class XTV extends javax.swing.JInternalFrame {
             this.dispose();
     }//GEN-LAST:event_formKeyPressed
 
+    private void But_ADDKTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADDKTMouseClicked
+        // TODO add your handling code here:
+        
+        try {
+            String a=jTable1.getValueAt(jTable1.getSelectedRow(),0).toString();
+            String b=jTable1.getValueAt(jTable1.getSelectedRow(),1).toString();
+            String c=jTable1.getValueAt(jTable1.getSelectedRow(),2).toString();
+//            System.out.println(a+"  "+b+" "+c);
+            data=new String[]{a,b,c};
+            Bridge.setData(data);
+            MAIN.a.getJDesktop().add(new ADD_KT());
+        } catch (Exception e) {
+            jDialog1.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_But_ADDKTMouseClicked
+
 
     public void HVT_ThanhVienActionPerformed(java.awt.event.ActionEvent evt) {
                 
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton But_ADDKT;
+    private javax.swing.JButton But_ADDTT;
     private javax.swing.JTextField HVT_ThanhVien;
     private javax.swing.JLabel TVkhonghople;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
