@@ -5,6 +5,7 @@
  */
 package caygiapha;
 
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.logging.Level;
@@ -21,6 +22,10 @@ public class SQH extends javax.swing.JInternalFrame {
      */
     public SQH() {
         initComponents();
+        ttv.setEnabled(false);
+        ns.setEnabled(false);
+        ttvc.setEnabled(false);
+        qhc.setEnabled(false);
         setVisible(true);
     }
 
@@ -40,6 +45,14 @@ public class SQH extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         matv = new javax.swing.JTextField();
         ltb = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        ttv = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        ns = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        ttvc = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        qhc = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Sửa quan hệ");
@@ -50,10 +63,16 @@ public class SQH extends javax.swing.JInternalFrame {
 
         Cqh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chồng", "Vợ", "Con" }));
         Cqh.setFocusable(false);
+        Cqh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CqhActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Đổi quan hệ:");
 
+        Bxacnhan.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         Bxacnhan.setText("XÁC NHẬN");
         Bxacnhan.setFocusable(false);
         Bxacnhan.addActionListener(new java.awt.event.ActionListener() {
@@ -70,52 +89,119 @@ public class SQH extends javax.swing.JInternalFrame {
                 matvActionPerformed(evt);
             }
         });
+        matv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                matvKeyPressed(evt);
+            }
+        });
+
+        ltb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel3.setText("Tên thành viên:");
+
+        ttv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ttvActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Ngày sinh:");
+
+        ns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nsActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Tên thành viên cũ:");
+
+        ttvc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ttvcActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Quan hệ cũ");
+
+        qhc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qhcActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ttv, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 1, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ns, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ttvc, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(matv)
-                            .addComponent(Cqh, 0, 131, Short.MAX_VALUE)))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Cqh, 0, 163, Short.MAX_VALUE)
+                            .addComponent(qhc)
+                            .addComponent(Bxacnhan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ltb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(ltb, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(Bxacnhan, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel11)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(matv)
-                        .addGap(3, 3, 3)))
+                    .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ttv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(ns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(ttvc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(qhc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Cqh, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+                .addGap(11, 11, 11)
                 .addComponent(Bxacnhan, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(ltb, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ltb, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -123,8 +209,8 @@ public class SQH extends javax.swing.JInternalFrame {
 
     private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
         // TODO add your handling code here:
-        String sql = "update TV set QQ = N'" + Cqh.getItemAt(Cqh.getSelectedIndex()) +"'";
-        String sql1= " from TV a where ID like '"+matv.getText()+"'";
+        String sql = "update QH set QH = N'" + Cqh.getItemAt(Cqh.getSelectedIndex()) +"'";
+        String sql1= " where ID like '"+matv.getText()+"'";
         String timma=" select ID from TV where ID like '" + matv.getText() + "'";
         ResultSet res=null;
         try {
@@ -152,9 +238,13 @@ public class SQH extends javax.swing.JInternalFrame {
             try {
             Statement sta=SQL.getConnection().createStatement();
             sta.executeUpdate(sql+sql1);
-            ltb.setText("Sủa thành công!");
+            ltb.setText("Sửa thành công!");
+            ttv.setText("");
+                    ns.setText("");
+                    ttvc.setText("");
+                    qhc.setText("");
             } catch (SQLException ex) {
- //             Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
+              Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
                 ltb.setText("Sửa thất bại!");
             }
         }
@@ -164,6 +254,61 @@ public class SQH extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_matvActionPerformed
 
+    private void ttvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ttvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ttvActionPerformed
+
+    private void qhcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qhcActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_qhcActionPerformed
+
+    private void CqhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CqhActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CqhActionPerformed
+
+    private void nsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nsActionPerformed
+
+    private void ttvcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ttvcActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ttvcActionPerformed
+
+    private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
+        // TODO add your handling code here:        
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER){
+          Statement s;
+          ResultSet r;
+          String a="select a.HVT,a.NS,c.HVT,QH from TV a, QH b, TV c where a.ID = b.ID and b.ID_O = c.ID and a.ID like '"+matv.getText()+"'";
+          
+          if(matv.getText().isEmpty())
+              ltb.setText("Hãy nhập mã thành viên!");
+          else{ 
+            try {
+                s=SQL.getConnection().createStatement();
+                r=s.executeQuery(a);
+                if(r.next()==true){
+                    ttv.setText(r.getString(1));
+                    ns.setText(r.getString(2));
+                    ttvc.setText(r.getString(3));
+                    qhc.setText(r.getString(4));
+                    ltb.setText("");
+                }else{
+                    ttv.setText("");
+                    ns.setText("");
+                    ttvc.setText("");
+                    qhc.setText("");
+                    ltb.setText("Không tìm thấy người này!");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             return;   
+           }
+        }
+        
+    }//GEN-LAST:event_matvKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bxacnhan;
@@ -171,7 +316,15 @@ public class SQH extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel ltb;
     private javax.swing.JTextField matv;
+    private javax.swing.JTextField ns;
+    private javax.swing.JTextField qhc;
+    private javax.swing.JTextField ttv;
+    private javax.swing.JTextField ttvc;
     // End of variables declaration//GEN-END:variables
 }
