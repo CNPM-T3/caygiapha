@@ -5,10 +5,13 @@
  */
 package caygiapha;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.sql.*;
 import java.util.logging.Level;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -22,13 +25,26 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     /**
      * Creates new form ADD_KT_1
      */
+    Date date = new Date();
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    Calendar cal= Calendar.getInstance();
+    DefaultTableModel model;
     public ADD_KT() {
         initComponents();
-        setVisible(true);
-        hovaten.disable();
-        ngaysinh.disable();
-        loi.setVisible(false);
+        if(Bridge.isOpen()){
+            String[] data=Bridge.getData();
+            matv.setText(data[0]);
+            hovaten.setText(data[1]);
+            ngaysinh.setText(data[2]);
+            matv.setEditable(false);
+        }
+        hovaten.setEditable(false);
+        ngaysinh.setEditable(false);
         timtc.setVisible(false);
+        them.setEnabled(false);
+        baoloi.setVisible(false);
+        Date n=new Date();
+        setVisible(true);
     }
 
     /**
@@ -42,7 +58,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
 
         baoloi = new javax.swing.JDialog();
         dongloi = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        textloi = new javax.swing.JLabel();
         L_ngaysinh = new javax.swing.JLabel();
         L_ngaymat = new javax.swing.JLabel();
         L_hovaten = new javax.swing.JLabel();
@@ -59,17 +75,13 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         dong = new javax.swing.JButton();
         ngaysinh = new javax.swing.JTextField();
         tim = new javax.swing.JButton();
-        loi = new javax.swing.JLabel();
         timtc = new javax.swing.JLabel();
         diadiemmaitang = new javax.swing.JComboBox<>();
         nguyennhanmat = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
 
         baoloi.setTitle("không tìm thấy");
         baoloi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        baoloi.setLocation(new java.awt.Point(65, 0));
+        baoloi.setLocation(new java.awt.Point(600, 350));
         baoloi.setMinimumSize(new java.awt.Dimension(290, 150));
         baoloi.setSize(getMinimumSize());
         baoloi.setType(java.awt.Window.Type.POPUP);
@@ -81,8 +93,8 @@ public class ADD_KT extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Không tìm thấy thành viên");
+        textloi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        textloi.setText("Không tìm thấy thành viên");
 
         javax.swing.GroupLayout baoloiLayout = new javax.swing.GroupLayout(baoloi.getContentPane());
         baoloi.getContentPane().setLayout(baoloiLayout);
@@ -94,14 +106,14 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                 .addContainerGap(87, Short.MAX_VALUE))
             .addGroup(baoloiLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(textloi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         baoloiLayout.setVerticalGroup(
             baoloiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, baoloiLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(textloi)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(dongloi)
                 .addContainerGap())
@@ -122,7 +134,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
             }
         });
 
-        thangmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        thangmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
         thangmat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 thangmatActionPerformed(evt);
@@ -173,19 +185,11 @@ public class ADD_KT extends javax.swing.JInternalFrame {
             }
         });
 
-        loi.setText("THÀNH VIÊN NÀY ĐÃ CÓ GIẤY KHAI TỬ");
-
         timtc.setText("ĐÃ TÌM THẤY THÀNH VIÊN");
 
-        diadiemmaitang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hà Nội", "Đà Nẵng", "Tp Hồ Chí Minh" }));
+        diadiemmaitang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Hà Nội", "Đà Nẵng", "Tp Hồ Chí Minh" }));
 
-        nguyennhanmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bệnh Lao", "Ung Thư", "Chấn Thương Sọ Não", "Tai Nạn Xe Cộ", "Bệnh Gan", "Bệnh Phổi", "Đột Quỵ", "Bệnh Tim", "Kháng Chiến", "Bệnh HIV", "Bệnh Sốt Xuất Huyết", "Bệnh H5N1", " " }));
-
-        jLabel2.setText("Năm");
-
-        jLabel3.setText("Tháng");
-
-        jLabel4.setText("Ngày");
+        nguyennhanmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Bệnh Lao", "Ung Thư", "Chấn Thương Sọ Não", "Tai Nạn Xe Cộ", "Bệnh Gan", "Bệnh Phổi", "Đột Quỵ", "Bệnh Tim", "Kháng Chiến", "Bệnh HIV", "Bệnh Sốt Xuất Huyết", "Bệnh H5N1", " " }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,17 +212,10 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
                                 .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                                 .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(87, 87, 87)
                                 .addComponent(nammat, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(54, 54, 54))
                             .addGroup(layout.createSequentialGroup()
@@ -231,9 +228,11 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(nguyennhanmat, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(L_mathanhvien)
-                                .addGap(35, 35, 35)
-                                .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGap(107, 107, 107)
+                                        .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(L_mathanhvien, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
@@ -247,47 +246,39 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                                 .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(99, 99, 99)
                                 .addComponent(tim, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 71, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(timtc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loi)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tua, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(L_mathanhvien))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(L_hovaten)
-                    .addComponent(hovaten, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(L_ngaysinh)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tim)))
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(loi)
-                    .addComponent(timtc))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(tua, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(L_mathanhvien)
+                            .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(L_hovaten)
+                            .addComponent(hovaten, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(L_ngaysinh)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(nammat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(L_ngaymat)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tim)))
+                        .addGap(14, 14, 14)
+                        .addComponent(timtc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nammat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(L_ngaymat))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6))
                     .addComponent(diadiemmaitang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -299,7 +290,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(them)
                     .addComponent(dong))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -315,100 +306,125 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         //MAIN.a.getJDesktop().add(new XTV());
     }//GEN-LAST:event_dongActionPerformed
 
-    private void diadiemmaitangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diadiemmaitangActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_diadiemmaitangActionPerformed
-
     private void hovatenKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_hovatenKeyPressed
 
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_hovatenKeyPressed
 
     private void matvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matvActionPerformed
         // TODO add your handling code here:
-        
-        
-        
+
+
+
     }//GEN-LAST:event_matvActionPerformed
 
     private void timMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_timMouseClicked
 
     private void timActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timActionPerformed
         // TODO add your handling code here:
         Statement a;
         ResultSet r,r1;
-        String SQL1="select hvt, ns, id from tv where id like '"+ matv.getText()+"'";
-        String SQL2="select id from KT";
-          try {
+        //tìm thông tin của thành viên được nhập
+        String SQL1="select hvt, ns, id "
+                + "from tv where id like '"+ matv.getText()+"'";
+        //tìm id của những người đã có giấy khai tử
+        String SQL2="select id from KT where id like '"+matv.getText()+"'";
+        try {
               a=SQL.getConnection().createStatement();
               r=a.executeQuery(SQL1);
+              /*
+              nếu tìm thấy thành viên
+              điền họ tên và ngày sinh
+              hiện thông báo và mở nút thêm
+              */
               if(r.isBeforeFirst()==true){
                 r.next();
                 hovaten.setText(r.getString(1));
                 ngaysinh.setText(r.getString(2));
+                timtc.setText("Đã tìm thấy thành viên");
                 timtc.setVisible(true);
                 them.setEnabled(true);
-              } else {
+              }
+              //nếu không thấy thành viên
+              else {
+                  timtc.setText("Không tìm thấy thành viên");
+                  timtc.setVisible(true);
                   them.setEnabled(false);
-                  return;
               }
               r1=a.executeQuery(SQL2);
-              if(r1.next()){
-                  if(matv.getText().compareTo(r1.getString(1))==0){
-                  loi.setVisible(true);
-                  ngaymat.disable();
-                  thangmat.disable();
-                  nammat.disable();
-                  diadiemmaitang.disable();
-                  nguyennhanmat.disable();
-                  timtc.setVisible(false);
-                  them.setEnabled(false);
-              }
-              else{
-                  loi.setVisible(false);
-                  timtc.setVisible(true);
-                  ngaymat.enable();
-                  thangmat.enable();
-                  nammat.enable();
-                  diadiemmaitang.enable();
-                  nguyennhanmat.enable();
-                  them.setEnabled(true);
-                  
-              }
-              }
-
-              
-          } catch (SQLException ex) {
+              //nếu đã có giấy khai tử
+              if(r1.isBeforeFirst()==true){
+                while(r1.next())
+                {
+                    if(matv.getText().compareTo(r1.getString(1))==0){
+                        timtc.setText("Thành viên này đã có giấy khai tử");
+                        them.setEnabled(false);
+                        
+                    }
+                }
+            }
+         }
+          catch (SQLException ex) {
               Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
           }
-          
+
     }//GEN-LAST:event_timActionPerformed
 
     private void themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_themActionPerformed
         Statement a=null;
+        ResultSet r;
         String idtv=matv.getText();
-        String nc= ngaymat.getItemAt(ngaymat.getSelectedIndex())+"/"+thangmat.getItemAt(thangmat.getSelectedIndex())+"/"+nammat.getText();
-        String ngnh=(String)nguyennhanmat.getSelectedItem();
-        String nmt=(String)diadiemmaitang.getSelectedItem();
+        
+        String nc = new String((String)ngaymat.getSelectedItem()+"/"+(String)thangmat.getSelectedItem()+"/"+nammat.getText());
+        
+        String ngnh= (String) nguyennhanmat.getSelectedItem();
+        String nmt= (String) diadiemmaitang.getSelectedItem();
+        Date nm= new Date(Integer.valueOf(nammat.getText())-1900,thangmat.getSelectedIndex(),ngaymat.getSelectedIndex()+1);
+        
+        Date n = new Date();
+        Date ns = null;
+        try{
+        String S="select ns from tv where id like '"+matv.getText()+"'";
+        a=SQL.getConnection().createStatement();
+        r=a.executeQuery(S);
+        r.next();
+        ns = r.getDate(1);
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        
+        if(nm.after(n)||nm.before(ns)){
+            textloi.setText("Lỗi nhập sai ngày");
+            baoloi.setVisible(true);
+            return;
+        }
+            
+        
+        
         String sql="insert into KT values ('"+idtv+"','"+nc+"',N'"+ngnh+"',N'"+nmt+"')";
         try {
             a=SQL.getConnection().createStatement();
             a.executeUpdate(sql);
+            timtc.setText("THÊM THÀNH CÔNG");
             // TODO add your handling code here:
         } catch (SQLException ex) {
             Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }//GEN-LAST:event_themActionPerformed
 
-    public void dongloiActionPerformed(java.awt.event.ActionEvent evt) {
-                baoloi.dispose();
-            }
-    
+    private void dongloiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dongloiActionPerformed
+        textloi.setText("Không tìm thấy thành viên");
+        baoloi.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_dongloiActionPerformed
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel L_hovaten;
     private javax.swing.JLabel L_mathanhvien;
@@ -419,18 +435,14 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private javax.swing.JButton dong;
     private javax.swing.JButton dongloi;
     private javax.swing.JTextField hovaten;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel loi;
     private javax.swing.JTextField matv;
     private javax.swing.JTextField nammat;
     private javax.swing.JComboBox<String> ngaymat;
     private javax.swing.JTextField ngaysinh;
     private javax.swing.JComboBox<String> nguyennhanmat;
+    private javax.swing.JLabel textloi;
     private javax.swing.JComboBox<String> thangmat;
     private javax.swing.JButton them;
     private javax.swing.JButton tim;

@@ -62,9 +62,20 @@ public class TGTV extends javax.swing.JInternalFrame {
                 tunamActionPerformed(evt);
             }
         });
+        tunam.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tunamKeyPressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Đến Năm");
+
+        dennam.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dennamKeyPressed(evt);
+            }
+        });
 
         TK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         TK.setModel(new javax.swing.table.DefaultTableModel(
@@ -221,6 +232,60 @@ public class TGTV extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void tunamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tunamKeyPressed
+        // TODO add your handling code here:
+        char chr=evt.getKeyChar();
+        String nam=tunam.getText();
+        int limit=nam.length();
+        if(chr==65535 || chr==127 || chr==27 || chr==10){
+            return;
+        }  
+        if(chr==8){
+            if((limit-1)<1 || (limit-1)==4){
+                jLabel4.setVisible(false);
+                return;
+            }
+        }
+        if((limit+1)>4){
+            jLabel4.setVisible(true);
+            jLabel4.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            return;
+        }
+        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+            jLabel4.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            jLabel4.setVisible(true);
+            return;
+        }
+        jLabel4.setVisible(false);
+    }//GEN-LAST:event_tunamKeyPressed
+
+    private void dennamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dennamKeyPressed
+        // TODO add your handling code here:
+         char chr=evt.getKeyChar();
+        String nam=dennam.getText();
+        int limit=nam.length();
+        if(chr==65535 || chr==127 || chr==27 || chr==10){ //bỏ qua cấc ký tự đặt biệt
+            return;
+        }  
+        if(chr==8){ // xoa ký tự 
+            if((limit-1)<1 || (limit-1)==4){ // nếu <1 hoặt ==4 thì sai trả về
+                jLabel4.setVisible(false);
+                return;
+            }
+        }
+        if((limit+1)>4){ // nếu >4 thì xuất
+            jLabel4.setVisible(true);
+            jLabel4.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            return;
+        }
+        if(evt.getKeyChar()<'0' || evt.getKeyChar()>'9'){
+            jLabel4.setText("Bạn nhập sai.\nVui lòng kiểm tra lại...");
+            jLabel4.setVisible(true);
+            return;
+        }
+        jLabel4.setVisible(false);                           
+    }//GEN-LAST:event_dennamKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

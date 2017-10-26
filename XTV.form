@@ -99,7 +99,9 @@
                       <Component id="TVkhonghople" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                      <Component id="But_ADDTT" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="But_ADDKT" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -158,7 +160,10 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="But_ADDTT" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="But_ADDKT" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -196,7 +201,7 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="5" rowCount="16">
-                <Column editable="false" title="ID" type="java.lang.Integer"/>
+                <Column editable="false" title="ID" type="java.lang.String"/>
                 <Column editable="false" title="H&#x1ecd; t&#xea;n" type="java.lang.String"/>
                 <Column editable="false" title="Ng&#xe0;y sinh" type="java.lang.String"/>
                 <Column editable="false" title="&#x110;&#x1edd;i" type="java.lang.String"/>
@@ -379,12 +384,12 @@
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jButton2KeyPressed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
+    <Component class="javax.swing.JButton" name="But_ADDTT">
       <Properties>
         <Property name="text" type="java.lang.String" value="Th&#xea;m th&#xe0;nh t&#xed;ch"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="But_ADDTTActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
@@ -399,6 +404,14 @@
         </Property>
         <Property name="text" type="java.lang.String" value="T&#xea;n th&#xe0;nh vi&#xea;n kh&#xf4;ng h&#x1ee3;p l&#x1ec7;"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="But_ADDKT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ghi nh&#x1ead;n t&#x1eed;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="But_ADDKTMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
