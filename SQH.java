@@ -22,10 +22,14 @@ public class SQH extends javax.swing.JInternalFrame {
      */
     public SQH() {
         initComponents();
-        ttv.setEnabled(false);
-        ns.setEnabled(false);
-        ttvc.setEnabled(false);
-        qhc.setEnabled(false);
+        ttv.setEditable(false);
+        ns.setEditable(false);
+        ttvc.setEditable(false);
+        qhc.setEditable(false);
+        if(Bridge.isOpen()){
+            String[] data=Bridge.getData();
+            
+        }
         setVisible(true);
     }
 

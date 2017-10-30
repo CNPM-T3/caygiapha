@@ -5,6 +5,7 @@
  */
 package caygiapha;
 
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     /**
      * Creates new form ADD_TT_1
      */
+        boolean edit=true;
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal= Calendar.getInstance();
@@ -35,13 +37,23 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         model = (DefaultTableModel) bang.getModel();
         model.setRowCount(0);
         if(Bridge.isOpen()){
-            String[] data=Bridge.getData();
-            matv.setText(data[0]);
-            hoVaTen.setText(data[1]);
-            ngaySinh.setText(data[2]);
-            matv.setEnabled(false);
-            hoVaTen.setEnabled(false);
-            ngaySinh.setEnabled(false);
+            try {
+                edit=false;
+                String[] data=Bridge.getData();
+                matv.setText(data[0]);
+                ResultSet res=Search_TT(matv.getText());
+                if(res.isBeforeFirst()){
+                    res.next();
+                    hoVaTen.setText(res.getString(1));
+                    ngaySinh.setText(df.format(res.getDate(2)));
+                }
+                matv.setEditable(false);
+                hoVaTen.setEditable(false);
+                ngaySinh.setEditable(false);
+            
+            } catch (SQLException ex) {
+                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         setVisible(true);
     }
@@ -82,6 +94,11 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         matv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 matvActionPerformed(evt);
+            }
+        });
+        matv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                matvKeyPressed(evt);
             }
         });
 
@@ -154,11 +171,13 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Họ và tên:");
 
+        hoVaTen.setEditable(false);
         hoVaTen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Ngày sinh:");
 
+        ngaySinh.setEditable(false);
         ngaySinh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,6 +274,18 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private ResultSet Search_TT(String ID){
+        try {
+            String cmd = "select HVT,NS from TV where ID like ?";
+            PreparedStatement ps= SQL.getConnection().prepareStatement(cmd);
+            ps.setString(1, ID);
+            return ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     private void matvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matvActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_matvActionPerformed
@@ -285,7 +316,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                 pre.setString(3, Cltt.getSelectedItem().toString());
                 res=pre.executeQuery();
                 if(res.isBeforeFirst()==false){
-                    String sql="insert into TT values(?,?,?)"; 
+                    String sql="insert into TT values(?,?,?)";
                     pre=SQL.getConnection().prepareStatement(sql);
                     pre.setString(1, matv.getText());
                     pre.setString(2,ngay.getText());
@@ -307,6 +338,51 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ClttActionPerformed
 
+    private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
+        // TODO add your handling code here:
+         ResultSet res;
+        if(evt.getKeyChar()==65535) {
+            return;
+        }
+        if(edit){
+            if(evt.getKeyChar()==KeyEvent.VK_ENTER){
+                try {
+                    res=Search_TT(matv.getText());
+                    if(res.isBeforeFirst()){
+                        res.next();
+                        hoVaTen.setText(res.getString(1));
+                        ngaySinh.setText(df.format(res.getDate(2)));
+                    } else {
+                        hoVaTen.setText("");
+                        ngaySinh.setText("");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+                    hoVaTen.setText("");
+                    ngaySinh.setText("");
+                }
+            } else {
+                if(matv.getText().length()>=6&&matv.getText().length()<=7){
+                    try {
+                        res = Search_TT(matv.getText()+evt.getKeyChar());
+                        if(res.isBeforeFirst()){
+                            res.next();
+                            hoVaTen.setText(res.getString(1));
+                            ngaySinh.setText(df.format(res.getDate(2)));
+                        } else {
+                            hoVaTen.setText("");
+                            ngaySinh.setText("");
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+                        hoVaTen.setText("");
+                        ngaySinh.setText("");
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_matvKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BThem;
@@ -327,8 +403,4 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     private javax.swing.JTextField ngay;
     private javax.swing.JTextField ngaySinh;
     // End of variables declaration//GEN-END:variables
-
-    private void add(String dateString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

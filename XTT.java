@@ -7,8 +7,7 @@ package caygiapha;
 
 import java.sql.*;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,12 +17,19 @@ import javax.swing.table.DefaultTableModel;
 public class XTT extends javax.swing.JInternalFrame {
     private String[] head={"STT","Thành tích","Số lượng"};
     private DefaultTableModel tb;
+    private String[] data;
     /**
      * Creates new form XTT_1
      */
     public XTT() {
         initComponents();
         tb= (DefaultTableModel) dsTT.getModel();
+        if(Bridge.isOpen()){
+            String []data=Bridge.getData();
+            jtxTenOrMa.setText(data[0]);
+            jtxTenOrMa.setEditable(false);
+            Search();
+        }
         setVisible(true);
     }
 
@@ -43,10 +49,11 @@ public class XTT extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jTenOrMa = new javax.swing.JLabel();
         jtxTenOrMa = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        But_Tim = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dsTT = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        But_ADDTT = new javax.swing.JButton();
 
         jThongBao.setMinimumSize(new java.awt.Dimension(400, 126));
         jThongBao.setResizable(false);
@@ -92,10 +99,10 @@ public class XTT extends javax.swing.JInternalFrame {
 
         jTenOrMa.setText("Mã thành viên");
 
-        jButton1.setText("Tìm");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        But_Tim.setText("Tìm");
+        But_Tim.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                But_TimMouseClicked(evt);
             }
         });
 
@@ -151,6 +158,13 @@ public class XTT extends javax.swing.JInternalFrame {
             }
         });
 
+        But_ADDTT.setText("Thêm thành tích");
+        But_ADDTT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                But_ADDTTMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,16 +175,18 @@ public class XTT extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(168, 168, 168)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(jButton2))
+                        .addComponent(But_Tim))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(110, 110, 110)
                         .addComponent(jTenOrMa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(But_ADDTT, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,12 +197,14 @@ public class XTT extends javax.swing.JInternalFrame {
                     .addComponent(jTenOrMa)
                     .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(But_Tim)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addGap(0, 15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(But_ADDTT))
+                .addContainerGap())
         );
 
         pack();
@@ -196,9 +214,7 @@ public class XTT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
+    private void Search(){
         String cmd = "select LTT,[Số lượng]=count(LTT)";
         try {
                 jThongBao.setVisible(false);
@@ -222,27 +238,43 @@ public class XTT extends javax.swing.JInternalFrame {
                     }
 //                    dsTT.setModel(tb); 
                 }
-                else {
-                    jLabel2.setText("Không tìm thấy thông tin...");
-                    jThongBao.setVisible(true);
-                    return;
-                }
+//                else {
+//                    jLabel2.setText("Không tìm thấy thông tin...");
+//                    jThongBao.setVisible(true);
+//                    return;
+//                }
         } catch (SQLException ex) {
                     jLabel2.setText("Hãy đảm bảo bạn đã nhập thông tin hợp lệ...");
                     jThongBao.setVisible(true);
             }
-    }//GEN-LAST:event_jButton1MouseClicked
+    }
+    private void But_TimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_TimMouseClicked
+        // TODO add your handling code here:
+        Search();
+    }//GEN-LAST:event_But_TimMouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
         jThongBao.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
 
+    private void But_ADDTTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADDTTMouseClicked
+        // TODO add your handling code here:
+        if(jtxTenOrMa.getText().isEmpty()||jtxTenOrMa.getText().length()<7||jtxTenOrMa.getText().length()>8) {
+            JOptionPane.showMessageDialog(this, "Mã thành viên không hợp lệ!","Lỗi",1);
+            return;
+        }
+        data=new String[]{jtxTenOrMa.getText()};
+        Bridge.setData(data);
+        MAIN.a.getJDesktop().add(new ADD_TT());
+    }//GEN-LAST:event_But_ADDTTMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton But_ADDTT;
+    private javax.swing.JButton But_Tim;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTable dsTT;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;

@@ -31,19 +31,27 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     DefaultTableModel model;
     public ADD_KT() {
         initComponents();
-        if(Bridge.isOpen()){
-            String[] data=Bridge.getData();
-            matv.setText(data[0]);
-            hovaten.setText(data[1]);
-            ngaysinh.setText(data[2]);
-            matv.setEditable(false);
-        }
         hovaten.setEditable(false);
         ngaysinh.setEditable(false);
         timtc.setVisible(false);
         them.setEnabled(false);
         baoloi.setVisible(false);
         Date n=new Date();
+        if(Bridge.isOpen()){
+            String[] data=Bridge.getData();
+            matv.setText(data[0]);
+            hovaten.setText(data[1]);
+            ngaysinh.setText(data[2]);
+            matv.setEditable(false);
+            boolean x=Search_KT();
+            tim.setEnabled(false);
+            if(x){
+                timtc.setText("Thành viên này đã có giấy khai tử");
+                timtc.setVisible(true);
+            } else {
+                them.setEnabled(true);
+            }
+        }
         setVisible(true);
     }
 
@@ -324,6 +332,17 @@ public class ADD_KT extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_timMouseClicked
 
+    private boolean Search_KT(){
+        try {
+            String SQL2="select id from KT where id like '"+matv.getText()+"'";
+            ResultSet r1=SQL.getConnection().createStatement().executeQuery(SQL2);
+            return r1.isBeforeFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
     private void timActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timActionPerformed
         // TODO add your handling code here:
         Statement a;
@@ -357,16 +376,20 @@ public class ADD_KT extends javax.swing.JInternalFrame {
               }
               r1=a.executeQuery(SQL2);
               //nếu đã có giấy khai tử
-              if(r1.isBeforeFirst()==true){
-                while(r1.next())
-                {
-                    if(matv.getText().compareTo(r1.getString(1))==0){
-                        timtc.setText("Thành viên này đã có giấy khai tử");
-                        them.setEnabled(false);
-                        
-                    }
-                }
-            }
+              if(Search_KT()){
+                    timtc.setText("Thành viên này đã có giấy khai tử");
+                    them.setEnabled(false);
+              }
+//              if(r1.isBeforeFirst()==true){
+//                while(r1.next())
+//                {
+//                    if(matv.getText().compareTo(r1.getString(1))==0){
+//                        timtc.setText("Thành viên này đã có giấy khai tử");
+//                        them.setEnabled(false);
+//                        
+//                    }
+//                }
+//            }
          }
           catch (SQLException ex) {
               Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);

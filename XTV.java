@@ -6,11 +6,13 @@
 package caygiapha;
 
 import java.awt.event.KeyEvent;
+import java.rmi.server.ExportException;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,30 +26,32 @@ public class XTV extends javax.swing.JInternalFrame {
      * Creates new form XTV_1
      */
 
-    void Select (String str){
+    
+
+    public XTV() {
+        initComponents();
+        Select();
+        setVisible(true);
+        soloi=0;
+    }
+    void Select (){
         try {
             DefaultTableModel tb= (DefaultTableModel) jTable1.getModel();
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select * from TCTVien (N'"+HVT_ThanhVien.getText()+"'";
-
-            if(namSinh.getText().isEmpty())
-                cmd+=",null";
-            else
-                 cmd+=","+Integer.valueOf(namSinh.getText());
-
-            if(thangSinh.getSelectedIndex()==0)
-                cmd+=",null";
-            else
-                cmd+=","+thangSinh.getSelectedIndex();
-
-            if(ngaySinh.getSelectedIndex()==0)
-                cmd+=",null";
-            else
-                cmd+=","+ngaySinh.getSelectedIndex();
-
-            cmd+=") group by matv,hoten,ngsinh,doi_,CM order by matv";
-
+            String cmd="select * from TCTVien() where hoten like N'"+HVT_ThanhVien.getText()+"%' ";
+            
+            if(ngaySinh.getSelectedIndex()!=0){
+                cmd+=" and day(ngsinh)="+ngaySinh.getSelectedItem();
+            }
+            if(thangSinh.getSelectedIndex()!=0){
+                cmd+=" and month(ngsinh)="+thangSinh.getSelectedItem();
+            }
+            if(!namSinh.getText().isEmpty()){
+                cmd+=" and year(ngsinh)="+Integer.valueOf(namSinh.getText());
+            }
+            
+            cmd+=" group by matv,hoten,ngsinh,doi_,CM order by matv";
             res=sta.executeQuery(cmd);
             int i=0;
             tb.setRowCount(0);
@@ -60,13 +64,6 @@ public class XTV extends javax.swing.JInternalFrame {
             Logger.getLogger(XTV.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public XTV() {
-        initComponents();
-        setVisible(true);
-        soloi=0;
-    }
-
  //   private void exit(){
  //       this.dispose();
  //   }
@@ -79,14 +76,10 @@ public class XTV extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDialog1 = new javax.swing.JDialog();
-        jButton3 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         HVT_ThanhVien = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -96,56 +89,16 @@ public class XTV extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         namSinh = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        But_ADDTT = new javax.swing.JButton();
+        But_XTT = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         TVkhonghople = new javax.swing.JLabel();
-        But_ADDKT = new javax.swing.JButton();
-
-        jDialog1.setTitle("Thông báo");
-        jDialog1.setLocationByPlatform(true);
-        jDialog1.setMinimumSize(new java.awt.Dimension(400, 105));
-
-        jButton3.setText("Đồng ý");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Vui lòng chọn thành viên");
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jButton3))
-        );
+        But_XGKT = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        But_ADD_TV = new javax.swing.JButton();
 
         setClosable(true);
         setResizable(true);
         setTitle("Xem Thông Tin Thành Viên");
-        try {
-            setSelected(true);
-        } catch (java.beans.PropertyVetoException e1) {
-            e1.printStackTrace();
-        }
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -208,13 +161,6 @@ public class XTV extends javax.swing.JInternalFrame {
             jTable1.getColumnModel().getColumn(3).setPreferredWidth(10);
             jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
-
-        jButton1.setText("Đóng");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Họ tên");
 
@@ -282,10 +228,10 @@ public class XTV extends javax.swing.JInternalFrame {
             }
         });
 
-        But_ADDTT.setText("Thêm thành tích");
-        But_ADDTT.addActionListener(new java.awt.event.ActionListener() {
+        But_XTT.setText("Xem thành tích");
+        But_XTT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                But_ADDTTActionPerformed(evt);
+                But_XTTActionPerformed(evt);
             }
         });
 
@@ -294,10 +240,24 @@ public class XTV extends javax.swing.JInternalFrame {
         TVkhonghople.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         TVkhonghople.setText("Tên thành viên không hợp lệ");
 
-        But_ADDKT.setText("Ghi nhận tử");
-        But_ADDKT.addMouseListener(new java.awt.event.MouseAdapter() {
+        But_XGKT.setText("Xem giấy tử");
+        But_XGKT.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                But_ADDKTMouseClicked(evt);
+                But_XGKTMouseClicked(evt);
+            }
+        });
+
+        jButton4.setText("Sửa quan hệ");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+
+        But_ADD_TV.setText("Thêm thành viên");
+        But_ADD_TV.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                But_ADD_TVMouseClicked(evt);
             }
         });
 
@@ -318,11 +278,13 @@ public class XTV extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(But_ADDTT)
+                        .addComponent(But_XTT)
                         .addGap(18, 18, 18)
-                        .addComponent(But_ADDKT)
+                        .addComponent(But_XGKT)
+                        .addGap(18, 18, 18)
+                        .addComponent(But_ADD_TV)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(jButton4))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
@@ -361,35 +323,26 @@ public class XTV extends javax.swing.JInternalFrame {
                     .addComponent(jButton2)
                     .addComponent(jLabel6)
                     .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 20, Short.MAX_VALUE)
+                .addGap(3, 28, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(But_ADDTT)
-                            .addComponent(But_ADDKT))))
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(But_XTT)
+                    .addComponent(But_XGKT)
+                    .addComponent(jButton4)
+                    .addComponent(But_ADD_TV))
+                .addGap(21, 21, 21))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        jDialog1.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
-/*
+    private void Error(){
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn thành viên","Lỗi",1);
+    }
+    /*
     private void HVT_ThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HVT_ThanhVienActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HVT_ThanhVienActionPerformed
@@ -404,30 +357,28 @@ public class XTV extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Select(HVT_ThanhVien.getText());
+        Select();
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void But_ADDTTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ADDTTActionPerformed
+    private void But_XTTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_XTTActionPerformed
         // TODO add your handling code here:
         try {
             String a=jTable1.getValueAt(jTable1.getSelectedRow(),0).toString();
-            String b=jTable1.getValueAt(jTable1.getSelectedRow(),1).toString();
-            String c=jTable1.getValueAt(jTable1.getSelectedRow(),2).toString();
 //            System.out.println(a+"  "+b+" "+c);
-            data=new String[]{a,b,c};
+            data=new String[]{a};
             Bridge.setData(data);
-            MAIN.a.getJDesktop().add(new ADD_TT());
+            MAIN.a.getJDesktop().add(new XTT());
         } catch (Exception e) {
-            jDialog1.setVisible(true);
+            Error();
         }
-    }//GEN-LAST:event_But_ADDTTActionPerformed
+    }//GEN-LAST:event_But_XTTActionPerformed
 
     private void HVT_ThanhVienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_HVT_ThanhVienKeyPressed
         // TODO add your handling code here:
         int n=evt.getKeyChar();
         if(n==KeyEvent.VK_ENTER){
-            Select(HVT_ThanhVien.getText());
+            Select();
             return;
         }
         if(n<'0'||n>'9'){
@@ -449,25 +400,25 @@ public class XTV extends javax.swing.JInternalFrame {
     private void ngaySinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaySinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(HVT_ThanhVien.getText());
+            Select();
     }//GEN-LAST:event_ngaySinhKeyPressed
 
     private void thangSinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_thangSinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(HVT_ThanhVien.getText());
+            Select();
     }//GEN-LAST:event_thangSinhKeyPressed
 
     private void namSinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_namSinhKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(HVT_ThanhVien.getText());
+            Select();
     }//GEN-LAST:event_namSinhKeyPressed
 
     private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
         // TODO add your handling code here:
         if(evt.getKeyChar()==KeyEvent.VK_ENTER)
-            Select(HVT_ThanhVien.getText());
+            Select();
     }//GEN-LAST:event_jButton2KeyPressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -477,22 +428,43 @@ public class XTV extends javax.swing.JInternalFrame {
             this.dispose();
     }//GEN-LAST:event_formKeyPressed
 
-    private void But_ADDKTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADDKTMouseClicked
+    private void But_XGKTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_XGKTMouseClicked
         // TODO add your handling code here:
         
         try {
             String a=jTable1.getValueAt(jTable1.getSelectedRow(),0).toString();
-            String b=jTable1.getValueAt(jTable1.getSelectedRow(),1).toString();
-            String c=jTable1.getValueAt(jTable1.getSelectedRow(),2).toString();
-//            System.out.println(a+"  "+b+" "+c);
-            data=new String[]{a,b,c};
+            data=new String[]{a};
             Bridge.setData(data);
-            MAIN.a.getJDesktop().add(new ADD_KT());
+            MAIN.a.getJDesktop().add(new XGKT());
         } catch (Exception e) {
-            jDialog1.setVisible(true);
+            Error();
         }
         
-    }//GEN-LAST:event_But_ADDKTMouseClicked
+    }//GEN-LAST:event_But_XGKTMouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        // TODO add your handling code here:
+        try {
+            String a = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            data=new String[]{a};
+            Bridge.setData(data);
+            MAIN.a.getJDesktop().add(new SQH());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Hãy chọn một thành viên!","Lỗi",1);
+        }
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void But_ADD_TVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADD_TVMouseClicked
+        // TODO add your handling code here:
+        try {
+            String a = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            data=new String[]{a};
+            Bridge.setData(data);
+            MAIN.a.getJDesktop().add(new ADD_TV());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Hãy chọn một thành viên!","Lỗi",1);
+        }
+    }//GEN-LAST:event_But_ADD_TVMouseClicked
 
 
     public void HVT_ThanhVienActionPerformed(java.awt.event.ActionEvent evt) {
@@ -500,18 +472,16 @@ public class XTV extends javax.swing.JInternalFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton But_ADDKT;
-    private javax.swing.JButton But_ADDTT;
+    private javax.swing.JButton But_ADD_TV;
+    private javax.swing.JButton But_XGKT;
+    private javax.swing.JButton But_XTT;
     private javax.swing.JTextField HVT_ThanhVien;
     private javax.swing.JLabel TVkhonghople;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

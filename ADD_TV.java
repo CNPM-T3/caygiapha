@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -23,16 +24,49 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal= Calendar.getInstance();
         DefaultTableModel model;
+        boolean edit=true;
     /**
      * Creates new form ADD_TV_1
      */
     public ADD_TV() {
         initComponents();
-        setVisible(true);
         jLabel9.setVisible(false);
-        ID.setVisible(false);
-        C_NamPS.setEnabled(false);
         C_NamPS.setText(df.format(date));
+        
+        if(Bridge.isOpen()){
+            String[] data=Bridge.getData();
+            Tx_MaTVC.setText(data[0]);
+            Tx_MaTVC.setEditable(false);
+            But_Tim.setEnabled(false);
+            edit=false;
+        }
+        Search();
+        setVisible(true);
+        
+    }
+    private void Search(){
+            try {
+                String cmd ="select HVT,GT,NS from TV where ID = ?";
+                PreparedStatement ps=SQL.getConnection().prepareStatement(cmd);
+                ps.setString(1, Tx_MaTVC.getText());
+                ResultSet re = ps.executeQuery();
+                if(re.isBeforeFirst()){
+                    re.next();
+                    Tx_ThanhVienCu.setText(re.getString(1));
+                    Txt_GT.setText(re.getString(2));
+                    Txt_NS.setText(re.getString(3));
+                } else {
+                    Tx_ThanhVienCu.setText("");
+                    Txt_GT.setText("");
+                    Txt_NS.setText("");
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên này!","Lỗi",1);
+                }
+            } catch (SQLException ex) {
+                Tx_ThanhVienCu.setText("");
+                Txt_GT.setText("");
+                Txt_NS.setText("");
+                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
     }
     @SuppressWarnings("unchecked")
@@ -148,6 +182,11 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         Tx_MaTVC = new javax.swing.JTextField();
         ID = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        Txt_GT = new javax.swing.JTextField();
+        Txt_NS = new javax.swing.JTextField();
+        But_Tim = new javax.swing.JButton();
 
         setClosable(true);
         setResizable(true);
@@ -160,8 +199,8 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Thành viên cũ");
 
-        Tx_ThanhVienCu.setEnabled(false);
-        Tx_ThanhVienCu.setSelectionColor(new java.awt.Color(125, 0, 0));
+        Tx_ThanhVienCu.setEditable(false);
+        Tx_ThanhVienCu.setSelectionColor(new java.awt.Color(0, 0, 125));
         Tx_ThanhVienCu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Tx_ThanhVienCuActionPerformed(evt);
@@ -263,6 +302,21 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
         jLabel9.setText("Đã thêm thành công");
 
+        jLabel7.setText("Giới tính:");
+
+        jLabel15.setText("Ngày sinh:");
+
+        Txt_GT.setEditable(false);
+
+        Txt_NS.setEditable(false);
+
+        But_Tim.setText("Tìm");
+        But_Tim.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                But_TimMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -272,66 +326,67 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(C_QuanHe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Tx_ThanhVM, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(C_NamPS, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(Tx_ThanhVienCu, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                                    .addComponent(Tx_MaTVC))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(C_QuanHe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Tx_ThanhVM, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(C_NamPS, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel2))
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(C_NgayS, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(C_ThangS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Tx_NamS, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(C_GioiTinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(26, 26, 26)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel2))
-                                .addGap(42, 42, 42)
+                                    .addComponent(Tx_DiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(C_NgheNghiep, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(C_NgayS, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(C_ThangS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(19, 19, 19)
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(Tx_NamS, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(C_GioiTinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addGap(26, 26, 26)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(Tx_DiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(C_NgheNghiep, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(But_Them)
-                                            .addComponent(jLabel9))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(ID)
-                                            .addComponent(But_Dong))))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel12)
-                                        .addComponent(jLabel14))
-                                    .addGap(42, 42, 42)
-                                    .addComponent(C_QueQuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 40, Short.MAX_VALUE))))
+                                    .addComponent(But_Them)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ID)
+                                    .addComponent(But_Dong))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel12)
+                                .addComponent(jLabel14))
+                            .addGap(42, 42, 42)
+                            .addComponent(C_QueQuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Tx_ThanhVienCu, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(Tx_MaTVC)
+                            .addComponent(Txt_GT)
+                            .addComponent(Txt_NS))
+                        .addGap(18, 18, 18)
+                        .addComponent(But_Tim)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,12 +395,21 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(Tx_MaTVC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Tx_MaTVC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(But_Tim))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Tx_ThanhVienCu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(Txt_GT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(Txt_NS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(C_QuanHe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -391,7 +455,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ID)
                     .addComponent(jLabel9))
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -404,28 +468,16 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
     private void Tx_MaTVCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Tx_MaTVCKeyPressed
         // TODO add your handling code here:.
+        if(!edit)
+            return;
         char chr=evt.getKeyChar();
-        if(chr==65535 || chr==KeyEvent.VK_DELETE || chr!=KeyEvent.VK_BACK_SPACE){
+        
+        if(chr==65535 || chr==KeyEvent.VK_DELETE || chr==KeyEvent.VK_BACK_SPACE){
             return;
         }
         
-        
         if(chr==KeyEvent.VK_ENTER){
-          Statement s;
-          ResultSet r;
-          String a="select HVT from TV where ID like '"+Tx_MaTVC.getText()+"'" ;
-          
-            try {
-                s=SQL.getConnection().createStatement();
-                r=s.executeQuery(a);
-                if(r.next()==true){
-                    Tx_ThanhVienCu.setText(r.getString(1));
-                }else{
-                    Tx_ThanhVienCu.setText("");
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
-            }
+          Search();
              return;   
         }
        
@@ -436,18 +488,26 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             
           Statement s;
           ResultSet r;
-          String a="select HVT from TV where ID like '"+Tx_MaTVC.getText()+chr+"'" ;
+          String a="select HVT,GT,NS from TV where ID like '"+id+chr+"'" ;
           
             try {
                 s=SQL.getConnection().createStatement();
                 r=s.executeQuery(a);
                 if(r.next()==true){
                     Tx_ThanhVienCu.setText(r.getString(1));
+                    Txt_GT.setText(r.getString(2));
+                    Txt_NS.setText(r.getString(3));
                 }else{
                     Tx_ThanhVienCu.setText("");
+                    Txt_GT.setText("");
+                    Txt_NS.setText("");
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên này!","Lỗi",1);
                 }
                
             } catch (SQLException ex) {
+                Tx_ThanhVienCu.setText("");
+                Txt_GT.setText("");
+                Txt_NS.setText("");
                 Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
             }
           
@@ -458,66 +518,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_Tx_MaTVCKeyPressed
 
     private void But_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ThemActionPerformed
-            try {
-                // TODO add your handling code here:
-                PreparedStatement s=null;
-                ResultSet res=null;
-                
-                String ns= new String(C_NgayS.getSelectedIndex()+"/"+C_ThangS.getSelectedIndex()+"/"+Tx_NamS.getText());
-                String t=Tx_ThanhVM.getText();
-                String dc=Tx_DiaChi.getText();
-                String qh=(String) C_QuanHe.getSelectedItem();
-
-                String gt=(String)C_GioiTinh.getSelectedItem();
-                String qq=(String)C_QueQuan.getSelectedItem();
-                String nn=(String)C_NgheNghiep.getSelectedItem();
-                
-                s=SQL.getConnection().prepareStatement("select ID from TV where ID like '01%' order by ID desc");
-                res=s.executeQuery();
-                if(res.isBeforeFirst()==false){
-                    String sql2="insert into TV values ('01ABCYZ',?,?,'"+ns+"',?,?,?,null)";
-                    s=SQL.getConnection().prepareStatement(sql2);
-                    s.setString(1,t);
-                    s.setString(2, gt);
-                    s.setString(3, qq);
-                    s.setString(4, nn);
-                    s.setString(5, dc);
-                    s.executeUpdate();
-                    return;
-                }
-                if(C_QuanHe.getSelectedIndex()==0){
-                    jLabel9.setText("Vui lòng chọn quan hệ");
-                    return;
-                }
-                String id=Get_ID();
-                String sql1="insert into QH values (?,?,?,?,'')";
-                String sql2="insert into TV values (?,?,?,'"+ns+"',?,?,?,'')";
-                
-                s=SQL.getConnection().prepareStatement(sql2);
-                
-                s.setString(1, id);
-                s.setString(2,t);
-                s.setString(3, gt);
-                s.setString(4, qq);
-                s.setString(5, nn);
-                s.setString(6, dc);
-
-                s.executeUpdate();
-                
-                s=SQL.getConnection().prepareStatement(sql1);
-                
-                s.setString(1, id);
-                s.setString(2, C_NamPS.getText());
-                s.setString(3, qh);
-                s.setString(4, Tx_MaTVC.getText());
-
-                s.executeUpdate();
-                
-            } catch (SQLException ex) {
-                jLabel9.setText("mã lỗi: "+ ex.getErrorCode());
-                
-                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
         
     }//GEN-LAST:event_But_ThemActionPerformed
 
@@ -528,6 +529,11 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     private void C_QueQuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_C_QueQuanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_C_QueQuanActionPerformed
+
+    private void But_TimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_TimMouseClicked
+        // TODO add your handling code here:
+        Search();
+    }//GEN-LAST:event_But_TimMouseClicked
 
     public void But_ThemKeyPressed(java.awt.event.KeyEvent evt){
         
@@ -565,6 +571,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton But_Dong;
     private javax.swing.JButton But_Them;
+    private javax.swing.JButton But_Tim;
     private javax.swing.JComboBox<String> C_GioiTinh;
     private javax.swing.JTextField C_NamPS;
     private javax.swing.JComboBox<String> C_NgayS;
@@ -578,17 +585,21 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     private javax.swing.JTextField Tx_NamS;
     private javax.swing.JTextField Tx_ThanhVM;
     private javax.swing.JTextField Tx_ThanhVienCu;
+    private javax.swing.JTextField Txt_GT;
+    private javax.swing.JTextField Txt_NS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables

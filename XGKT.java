@@ -6,20 +6,32 @@
 package caygiapha;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author ADT
  */
 public class XGKT extends javax.swing.JInternalFrame {
-
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    
     /**
      * Creates new form XGKT_1
      */
     public XGKT() {
         initComponents();
+        But_ADD_KT.setEnabled(false);
+        if(Bridge.isOpen()){
+            String data[]=Bridge.getData();
+            Txt_MaTV.setText(data[0]);
+            Txt_MaTV.setEditable(false);
+            L_Thongbao.setText("");
+            Tim1();
+        }
         setVisible(true);
         
     }
@@ -45,10 +57,11 @@ public class XGKT extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        Txt_MaTV = new javax.swing.JTextField();
         L_Hovaten = new javax.swing.JLabel();
         L_Ngaysinh = new javax.swing.JLabel();
         L_Thongbao = new javax.swing.JLabel();
+        But_ADD_KT = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Xem Giấy Khai Tử");
@@ -86,57 +99,64 @@ public class XGKT extends javax.swing.JInternalFrame {
         L_Thongbao.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         L_Thongbao.setForeground(new java.awt.Color(250, 100, 60));
 
+        But_ADD_KT.setText("Thêm giấy tử");
+        But_ADD_KT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                But_ADD_KTMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(L_Nguyennhanmat, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(L_Diadiemmaitang, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(45, 45, 45)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jButton1)
-                                        .addGap(100, 100, 100))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(L_Hovaten, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(L_Ngaysinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(L_Thongbao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(L_Ngayphatsinh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(L_Diadiemmaitang, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel16)
+                                    .addGap(45, 45, 45)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Txt_MaTV, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jButton1)
+                                            .addGap(100, 100, 100))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(L_Nguyennhanmat, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(L_Hovaten, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(L_Ngaysinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(But_ADD_KT)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(L_Thongbao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(L_Ngayphatsinh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,7 +165,7 @@ public class XGKT extends javax.swing.JInternalFrame {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Txt_MaTV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -169,11 +189,13 @@ public class XGKT extends javax.swing.JInternalFrame {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(L_Nguyennhanmat, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addComponent(jButton2))
+                            .addComponent(L_Nguyennhanmat, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel8))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(But_ADD_KT))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,23 +207,37 @@ public class XGKT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
     private void Tim1(){
         try {
-            L_Thongbao.setText("");
             ResultSet res;
-            String sql="select hvt,ns,nc,nmt,k.NN from KT k, TV t where t.id=k.id and t.id like ?";
+            String sql="select hvt,ns from TV t where t.id like ?";
             PreparedStatement pre= SQL.getConnection().prepareStatement(sql);
-            pre.setString(1, jTextField2.getText());
+            pre.setString(1, Txt_MaTV.getText());
             res=pre.executeQuery();
             if(res.isBeforeFirst()==true){
                 res.next();
                 L_Hovaten.setText(res.getString(1));
-                L_Ngaysinh.setText(res.getString(2));
-                L_Ngayphatsinh.setText(res.getString(3));
-                L_Diadiemmaitang.setText(res.getString(4));
-                L_Nguyennhanmat.setText(res.getString(5));
+                L_Ngaysinh.setText(df.format(res.getDate(2)));
+                L_Thongbao.setText("");
             } else {
-                L_Thongbao.setText("Không có trong cơ sở dữ liệu.");
+                L_Thongbao.setText("Không tìm thấy thành viên này.");
+                return;
             }
                 
+            sql="select NC,NMT,NN from KT where ID like ?";
+            pre= SQL.getConnection().prepareStatement(sql);
+            pre.setString(1, Txt_MaTV.getText());
+            res=pre.executeQuery();
+            if(res.isBeforeFirst()){
+                res.next();
+                L_Ngayphatsinh.setText(df.format(res.getDate(1)));
+                L_Diadiemmaitang.setText(res.getString(2));
+                L_Nguyennhanmat.setText(res.getString(3));
+                L_Thongbao.setText("");
+                But_ADD_KT.setEnabled(false);
+            } else {
+                L_Thongbao.setText("Không tìm thấy giấy tử.");
+                L_Thongbao.setVisible(true);
+                But_ADD_KT.setEnabled(true);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(XGKT.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -215,14 +251,28 @@ public class XGKT extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1MouseClicked
 
+    private void But_ADD_KTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADD_KTMouseClicked
+        // TODO add your handling code here:
+        int len=Txt_MaTV.getText().length();
+        if(len<7||len>8) {
+            JOptionPane.showMessageDialog(this, "Mã thành viên không hợp lệ!","Lỗi",1);
+            return;
+        }
+        String [] data=new String[]{Txt_MaTV.getText(),L_Hovaten.getText(),L_Ngaysinh.getText()};
+        Bridge.setData(data);
+        MAIN.a.getJDesktop().add(new ADD_KT());
+    }//GEN-LAST:event_But_ADD_KTMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton But_ADD_KT;
     private javax.swing.JLabel L_Diadiemmaitang;
     private javax.swing.JLabel L_Hovaten;
     private javax.swing.JLabel L_Ngayphatsinh;
     private javax.swing.JLabel L_Ngaysinh;
     private javax.swing.JLabel L_Nguyennhanmat;
     private javax.swing.JLabel L_Thongbao;
+    private javax.swing.JTextField Txt_MaTV;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -232,6 +282,5 @@ public class XGKT extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
