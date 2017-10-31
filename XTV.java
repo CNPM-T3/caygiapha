@@ -39,19 +39,17 @@ public class XTV extends javax.swing.JInternalFrame {
             DefaultTableModel tb= (DefaultTableModel) jTable1.getModel();
             Statement sta=SQL.getConnection().createStatement();
             ResultSet res;
-            String cmd="select * from TCTVien() where hoten like N'"+HVT_ThanhVien.getText()+"%' ";
+            String cmd="select ID,HVT,NS,left(ID,2), (case when left (ID,2) like '01' then '' else dbo.TC (ID) end) from TV where HVT like N'"+HVT_ThanhVien.getText()+"%'";
             
             if(ngaySinh.getSelectedIndex()!=0){
-                cmd+=" and day(ngsinh)="+ngaySinh.getSelectedItem();
+                cmd+=" and day(NS)="+ngaySinh.getSelectedItem();
             }
             if(thangSinh.getSelectedIndex()!=0){
-                cmd+=" and month(ngsinh)="+thangSinh.getSelectedItem();
+                cmd+=" and month(NS)="+thangSinh.getSelectedItem();
             }
             if(!namSinh.getText().isEmpty()){
-                cmd+=" and year(ngsinh)="+Integer.valueOf(namSinh.getText());
+                cmd+=" and year(NS)="+Integer.valueOf(namSinh.getText());
             }
-            
-            cmd+=" group by matv,hoten,ngsinh,doi_,CM order by matv";
             res=sta.executeQuery(cmd);
             int i=0;
             tb.setRowCount(0);
@@ -61,6 +59,7 @@ public class XTV extends javax.swing.JInternalFrame {
                     tb.addRow(Odata);
                 }
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),Integer.toString(ex.getErrorCode()),1);
             Logger.getLogger(XTV.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
