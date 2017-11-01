@@ -208,7 +208,7 @@ public class XGKT extends javax.swing.JInternalFrame {
     private void Tim1(){
         try {
             ResultSet res;
-            String sql="select hvt,ns from TV t where t.id like ?";
+            String sql="select HVT,NS from TV where ID like ?";
             PreparedStatement pre= SQL.getConnection().prepareStatement(sql);
             pre.setString(1, Txt_MaTV.getText());
             res=pre.executeQuery();
