@@ -5,6 +5,7 @@
  */
 
 package caygiapha;
+import java.util.Date;
 import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.text.DateFormat;
@@ -33,6 +34,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         initComponents();
         jLabel9.setVisible(false);
         C_NamPS.setText(df.format(date));
+        Date n=new Date();
         LoadDate();
         if(Bridge.isOpen()){
             String[] data=Bridge.getData();
@@ -568,7 +570,24 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     
     private void But_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ThemActionPerformed
             try {
-                
+               Statement a=null;
+                ResultSet r;
+                Date n = new Date();
+                Date nsc = null;
+                try{
+                String S="select ns from tv where id like '"+Tx_MaTVC.getText()+"'";
+                a=SQL.getConnection().createStatement();
+                r=a.executeQuery(S);
+                r.next();
+                nsc = r.getDate(1);
+                }
+            catch (SQLException ex) {
+                Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+                String qh=C_QuanHe.getSelectedItem().toString();
+                Date nsD= new Date((Integer.valueOf(Tx_NamS.getText())-1900)-15,C_ThangS.getSelectedIndex(),C_NgayS.getSelectedIndex()+1);
+               // String nc = new String((String)ngaymat.getSelectedItem()+"/"+(String)thangmat.getSelectedItem()+"/"+nammat.getText());
                 String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
                 String ID=Get_ID();
                 String ns=C_NgayS.getSelectedItem().toString()+"/"+C_ThangS.getSelectedItem().toString()+"/"+Tx_NamS.getText();
@@ -600,8 +619,12 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                     Txt_GT.setText("");
                     Txt_NS.setText("");
                 }
-                JOptionPane.showMessageDialog(this,"Thêm thành công","Thông báo",1);
-                
+                if(nsc.after(nsD) && qh=="Con"){
+                    JOptionPane.showMessageDialog(this,"Lỗi","Thông báo",1);
+                }
+                else {
+                    JOptionPane.showMessageDialog(this,"Thêm thành công","Thông báo",1);
+                };
             } catch (SQLException ex) {
 //                int begin=ex.getMessage().indexOf("\"")+1;
 //                int end=ex.getMessage().indexOf("\". ");
