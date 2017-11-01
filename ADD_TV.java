@@ -571,7 +571,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 
                 String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
                 String ID=Get_ID();
-                String ns=C_NgayS.getSelectedIndex()+"/"+C_ThangS.getSelectedIndex()+"/"+Tx_NamS.getText();
+                String ns=C_NgayS.getSelectedItem().toString()+"/"+C_ThangS.getSelectedItem().toString()+"/"+Tx_NamS.getText();
                 PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
                 pre.setString(1, ID);
                 pre.setString(2, Tx_ThanhVM.getText());
@@ -603,9 +603,9 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this,"Thêm thành công","Thông báo",1);
                 
             } catch (SQLException ex) {
-                int begin=ex.getMessage().indexOf("\"")+1;
-                int end=ex.getMessage().indexOf("\". ");
-                JOptionPane.showMessageDialog(this,ex.getMessage().substring(begin,end),Integer.toString(ex.getErrorCode()),1);
+//                int begin=ex.getMessage().indexOf("\"")+1;
+//                int end=ex.getMessage().indexOf("\". ");
+//                JOptionPane.showMessageDialog(this,ex.getMessage().substring(begin,end),Integer.toString(ex.getErrorCode()),1);
                 Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
             }
             

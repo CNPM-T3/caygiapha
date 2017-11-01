@@ -6,10 +6,8 @@
 package caygiapha;
 
 import java.awt.event.KeyEvent;
-import java.rmi.server.ExportException;
 import java.sql.*;
 import java.sql.SQLException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class XTV extends javax.swing.JInternalFrame {
     private String[] data;
-    private int soloi;
     /**
      * Creates new form XTV_1
      */
@@ -32,7 +29,6 @@ public class XTV extends javax.swing.JInternalFrame {
         initComponents();
         Select();
         setVisible(true);
-        soloi=0;
     }
     void Select (){
         try {
@@ -90,7 +86,6 @@ public class XTV extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         But_XTT = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        TVkhonghople = new javax.swing.JLabel();
         But_XGKT = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         But_ADD_TV = new javax.swing.JButton();
@@ -236,9 +231,6 @@ public class XTV extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Ngày sinh:");
 
-        TVkhonghople.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        TVkhonghople.setText("Tên thành viên không hợp lệ");
-
         But_XGKT.setText("Xem giấy tử");
         But_XGKT.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -274,8 +266,7 @@ public class XTV extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(HVT_ThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(But_XTT)
                         .addGap(18, 18, 18)
@@ -310,8 +301,7 @@ public class XTV extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(HVT_ThanhVien, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TVkhonghople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -322,7 +312,7 @@ public class XTV extends javax.swing.JInternalFrame {
                     .addComponent(jButton2)
                     .addComponent(jLabel6)
                     .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 28, Short.MAX_VALUE)
+                .addGap(3, 32, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -380,20 +370,7 @@ public class XTV extends javax.swing.JInternalFrame {
             Select();
             return;
         }
-        if(n<'0'||n>'9'){
-            if(soloi!=0)
-            soloi--;
-            return;
-        }
-        if((n<8&&n>127)&&(n!=27||n!=9||n!=20||n!=16||n!=17||n!=18||n!=32||n!=37||n!=38||n!=39||n!=40)){
-                TVkhonghople.setVisible(true);
-                soloi++;
-                return;
-        }
         n=HVT_ThanhVien.getText().charAt(HVT_ThanhVien.getText().length()-1);
-        if(soloi==0){
-            TVkhonghople.setVisible(false);
-        }
     }//GEN-LAST:event_HVT_ThanhVienKeyPressed
 
     private void ngaySinhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaySinhKeyPressed
@@ -475,7 +452,6 @@ public class XTV extends javax.swing.JInternalFrame {
     private javax.swing.JButton But_XGKT;
     private javax.swing.JButton But_XTT;
     private javax.swing.JTextField HVT_ThanhVien;
-    private javax.swing.JLabel TVkhonghople;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
