@@ -586,6 +586,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 return;
             }
                 String qh=C_QuanHe.getSelectedItem().toString();
+                String gt=C_GioiTinh.getSelectedItem().toString();
                 Date nsD= new Date((Integer.valueOf(Tx_NamS.getText())-1900)-15,C_ThangS.getSelectedIndex(),C_NgayS.getSelectedIndex()+1);
                // String nc = new String((String)ngaymat.getSelectedItem()+"/"+(String)thangmat.getSelectedItem()+"/"+nammat.getText());
                 String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
@@ -619,7 +620,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                     Txt_GT.setText("");
                     Txt_NS.setText("");
                 }
-                if(nsc.after(nsD) && qh=="Con"){
+                if(nsc.after(nsD) && qh=="Con" || qh =="Vợ" && gt=="Nam" || qh=="Chồng" && gt=="Nữ"){
                     JOptionPane.showMessageDialog(this,"Lỗi","Thông báo",1);
                 }
                 else {
