@@ -22,14 +22,10 @@ public class SQH extends javax.swing.JInternalFrame {
      */
     public SQH() {
         initComponents();
-        ttv.setEditable(false);
-        ns.setEditable(false);
-        ttvc.setEditable(false);
-        qhc.setEditable(false);
-        if(Bridge.isOpen()){
-            String[] data=Bridge.getData();
-            
-        }
+        ttv.setEnabled(false);
+        ns.setEnabled(false);
+        ttvc.setEnabled(false);
+        qhc.setEnabled(false);
         setVisible(true);
     }
 
@@ -225,12 +221,16 @@ public class SQH extends javax.swing.JInternalFrame {
         }
         
         if(matv.getText().isEmpty())
-           ltb.setText("Hãy nhập mã thành viên!");
+        {    
+            ltb.setText("Hãy nhập mã thành viên!");
+            Cqh.setEnabled(false);
+        }
         else
         {
             try {
                 if(res.isBeforeFirst());
                 else{
+                Cqh.setEnabled(false);
                 ltb.setText("Không tìm thấy người này!");
                 ltb.setVisible(true);
                 return;
@@ -286,7 +286,10 @@ public class SQH extends javax.swing.JInternalFrame {
           String a="select a.HVT,a.NS,c.HVT,QH from TV a, QH b, TV c where a.ID = b.ID and b.ID_O = c.ID and a.ID like '"+matv.getText()+"'";
           
           if(matv.getText().isEmpty())
+          {    
               ltb.setText("Hãy nhập mã thành viên!");
+              Cqh.setEnabled(false);
+          }
           else{ 
             try {
                 s=SQL.getConnection().createStatement();
@@ -302,7 +305,9 @@ public class SQH extends javax.swing.JInternalFrame {
                     ns.setText("");
                     ttvc.setText("");
                     qhc.setText("");
+                    Cqh.setEnabled(false);
                     ltb.setText("Không tìm thấy người này!");
+                    ltb.setVisible(true);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);

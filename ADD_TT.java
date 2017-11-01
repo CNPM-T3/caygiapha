@@ -56,6 +56,8 @@ public class ADD_TT extends javax.swing.JInternalFrame {
             }
         }
         setVisible(true);
+        hoVaTen.setEnabled(false);
+        ngaySinh.setEnabled(false);
     }
 
     /**
@@ -209,8 +211,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(ngaySinh)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(Lthongbao))
+                                        .addGap(4, 4, 4))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -224,11 +225,13 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(209, 209, 209)
                                 .addComponent(BThem)))
-                        .addContainerGap(49, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(207, 207, 207)
-                .addComponent(Bdong)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(49, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addComponent(Bdong)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Lthongbao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,17 +245,11 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                         .addComponent(matv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
                         .addComponent(hoVaTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Lthongbao)
-                        .addGap(33, 33, 33))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ngaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -264,10 +261,12 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                 .addComponent(BThem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Bdong)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Bdong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Lthongbao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -326,8 +325,9 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                         model.addRow(a);
                         Lthongbao.setText("Thêm thành công!");
                     }  
-                } else
+                } else{
                         Lthongbao.setText("Thông tin này đã có!");
+                        Cltt.setEnabled(false);}
             } catch (SQLException ex) {
                 Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
                 Lthongbao.setText("Thêm thất bại!");
@@ -340,6 +340,7 @@ public class ADD_TT extends javax.swing.JInternalFrame {
 
     private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
         // TODO add your handling code here:
+        //------Phần của Tuyến------
          ResultSet res;
         if(evt.getKeyChar()==65535) {
             return;
@@ -380,6 +381,37 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                     }
                 }
             }
+        }
+        //------Phần của Phúc------
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER){
+          Statement s;
+          ResultSet r;
+          String a="select HVT,NS from TV where ID like '"+matv.getText()+"'";
+          
+          if(matv.getText().isEmpty())
+          {
+              Lthongbao.setText("Hãy nhập mã thành viên!");
+              Cltt.setEnabled(false);
+          }
+          else{ 
+            try {
+                s=SQL.getConnection().createStatement();
+                r=s.executeQuery(a);
+                if(r.next()==true){
+                    hoVaTen.setText(r.getString(1));
+                    ngaySinh.setText(r.getString(2));
+                }else{
+                    hoVaTen.setText("");
+                    ngaySinh.setText("");
+                    Cltt.setEnabled(false);
+                    Lthongbao.setText("Không tìm thấy người này!");
+                    Lthongbao.setVisible(true);                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             return;   
+           }
         }
     }//GEN-LAST:event_matvKeyPressed
 

@@ -221,13 +221,19 @@ public class SQQNN extends javax.swing.JInternalFrame {
         }   
         
         if(matv.getText().isEmpty())
-            ltb.setText("Hãy nhập mã thành viên!");
+        {
+                ltb.setText("Hãy nhập mã thành viên!");
+                Csqq.setEnabled(false);
+                Csnn.setEnabled(false);
+        }
         else
         {
             //Xét xem mã có trong ds tv hay không
             try {
                 if(res.isBeforeFirst());//xác đinh coi có(true) hay không(false)
                 else {
+                    Csqq.setEnabled(false);
+                    Csnn.setEnabled(false);
                     ltb.setText("Không tìm thấy người này.");
                     ltb.setVisible(true);
                     return;
@@ -280,7 +286,11 @@ public class SQQNN extends javax.swing.JInternalFrame {
             Statement sta;
             
             if(matv.getText().isEmpty())
+            {
                 ltb.setText("Hãy nhập mã thành viên!");
+                Csqq.setEnabled(false);
+                Csnn.setEnabled(false);
+            }
             else
             {
                 try {
@@ -299,6 +309,9 @@ public class SQQNN extends javax.swing.JInternalFrame {
                         nnc.setText("");
                         qqc.setText("");
                         ltb.setText("Không tìm thấy người này!");
+                        ltb.setVisible(true);
+                        Csqq.setEnabled(false);
+                        Csnn.setEnabled(false);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(SQQNN.class.getName()).log(Level.SEVERE, null, ex);
