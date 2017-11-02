@@ -26,7 +26,6 @@ public class SQH extends javax.swing.JInternalFrame {
      */
     private String nstvc;
     private String gt;
-    boolean visible=true;
     DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
     public SQH() {
         initComponents();
@@ -43,8 +42,12 @@ public class SQH extends javax.swing.JInternalFrame {
         matv.setText(ma);
         matv.setEditable(false);
         Bxacnhan.setEnabled(true);
-        Search(matv.getText());
-        setVisible(visible);
+        boolean x=Search(matv.getText());
+        if(x){
+            setVisible(true);
+        } else {
+            dispose();
+        }
     }
     
     /**
@@ -273,7 +276,7 @@ public class SQH extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Search(String ma){
+    private boolean Search(String ma){
         String cmd="select T.HVT,T.NS,T1.HVT,QH,T1.NS,T.GT from TV T left outer join QH Q on T.ID=Q.ID left outer join TV T1 on ID_O=T1.ID where T.ID like ?";
         try {
             PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
@@ -282,8 +285,7 @@ public class SQH extends javax.swing.JInternalFrame {
             if(r.next()==true){
                     if(r.getDate(5)==null){
                         JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thành viên cũ.","Lỗi",1);
-                        visible=false;
-                        dispose();
+                        return false;
                     } else {
                         ttv.setText(r.getString(1));
                         ns.setText(df.format(r.getDate(2)));
@@ -302,8 +304,10 @@ public class SQH extends javax.swing.JInternalFrame {
                     ltb.setText("Không tìm thấy người này!");
                     ltb.setVisible(true);
                 }
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
     
