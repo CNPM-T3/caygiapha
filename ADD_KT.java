@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -408,7 +409,8 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         ns = r.getDate(1);
         }
         catch (SQLException ex) {
-            Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Lỗi",1);
+//            Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         
@@ -427,6 +429,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
             timtc.setText("THÊM THÀNH CÔNG");
             // TODO add your handling code here:
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Lỗi",1);
             Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_themActionPerformed

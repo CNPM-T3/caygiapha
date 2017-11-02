@@ -607,7 +607,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         }
                 
         try {
-                String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
+                String cmd ="insert into TV values (?,?,?,?,?,?,?) insert into QH values (?,?,?,?)";
                 String ns=C_NgayS.getSelectedItem().toString()+"/"+C_ThangS.getSelectedItem().toString()+"/"+Tx_NamS.getText();
                 if(C_QuanHe.getSelectedIndex()==3 && Check_Year(ns)) {
                     JOptionPane.showMessageDialog(this, "Cha/mẹ phải hơn con 15 trở lên.","Lỗi",1);
@@ -656,7 +656,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             } catch (SQLException ex) {
 //                int begin=ex.getMessage().indexOf("\"")+1;
 //                int end=ex.getMessage().indexOf("\". ");
-                JOptionPane.showMessageDialog(this,ex.getMessage(),Integer.toString(ex.getErrorCode()),1);
+                JOptionPane.showMessageDialog(this,ex.getMessage(),"Lỗi",1);
 //                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
             }
             

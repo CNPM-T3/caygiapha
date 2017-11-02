@@ -288,7 +288,8 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                 BThem.setEnabled(false);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,ex.getMessage(),"Lỗi",1);
+//            Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
             BThem.setEnabled(false);
         }
     }
