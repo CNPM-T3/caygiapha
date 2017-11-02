@@ -5,8 +5,13 @@
  */
 package caygiapha;
 
+import java.awt.event.KeyEvent;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,18 +23,24 @@ public class XTT extends javax.swing.JInternalFrame {
     private String[] head={"STT","Thành tích","Số lượng"};
     private DefaultTableModel tb;
     private String[] data;
+    DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
+    private boolean edit=true;
     /**
      * Creates new form XTT_1
      */
     public XTT() {
         initComponents();
         tb= (DefaultTableModel) dsTT.getModel();
-        if(Bridge.isOpen()){
-            String []data=Bridge.getData();
-            jtxTenOrMa.setText(data[0]);
-            jtxTenOrMa.setEditable(false);
-            Search();
-        }
+        setVisible(true);
+    }
+    public XTT(String ma){
+        initComponents();
+        String ma1=new String(ma);
+        tb= (DefaultTableModel) dsTT.getModel();
+        Txt_ID.setText(ma1);
+        Txt_ID.setEditable(false);
+        Search_TV(Txt_ID.getText());
+        edit=false;
         setVisible(true);
     }
 
@@ -48,12 +59,16 @@ public class XTT extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTenOrMa = new javax.swing.JLabel();
-        jtxTenOrMa = new javax.swing.JTextField();
+        Txt_ID = new javax.swing.JTextField();
         But_Tim = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dsTT = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         But_ADDTT = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        Txt_HVT = new javax.swing.JTextField();
+        Txt_NS = new javax.swing.JTextField();
 
         jThongBao.setMinimumSize(new java.awt.Dimension(400, 126));
         jThongBao.setResizable(false);
@@ -97,7 +112,13 @@ public class XTT extends javax.swing.JInternalFrame {
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jTenOrMa.setText("Mã thành viên");
+        jTenOrMa.setText("Mã thành viên:");
+
+        Txt_ID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Txt_IDKeyPressed(evt);
+            }
+        });
 
         But_Tim.setText("Tìm");
         But_Tim.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -165,42 +186,64 @@ public class XTT extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setText("Ngày sinh:");
+
+        jLabel4.setText("Họ và tên:");
+
+        Txt_HVT.setEditable(false);
+
+        Txt_NS.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(168, 168, 168)
-                        .addComponent(But_Tim))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(110, 110, 110)
-                        .addComponent(jTenOrMa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(But_ADDTT, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTenOrMa)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Txt_ID, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Txt_HVT)
+                            .addComponent(Txt_NS, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(157, 157, 157)
+                        .addComponent(But_Tim)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTenOrMa)
-                    .addComponent(jtxTenOrMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(Txt_ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Txt_HVT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(Txt_NS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(But_Tim)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(But_ADDTT))
@@ -214,7 +257,39 @@ public class XTT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-    private void Search(){
+    
+    private void Search_TV(String ma){
+        try {
+            //Khai báo câu truy vấn SQL
+            String cmd="select HVT,NS from TV where ID like ?";
+            PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
+            pre.setString(1, ma);
+            //Thực thi câu truy vấn
+            ResultSet re = pre.executeQuery();
+            if(re.isBeforeFirst()){
+                //đến phần tử tiếp theo
+                re.next();
+                //Xuất thông tin thành viên
+                Txt_HVT.setText(re.getString(1));
+                Txt_NS.setText(df.format(re.getDate(2)));
+                //Enable button
+                But_ADDTT.setEnabled(true);
+                //hàm liệt kê thành tích
+                Search(ma);
+            }else { //Nếu không tìm thấy thông tin thành viên
+                Txt_HVT.setText("");
+                Txt_NS.setText("");
+                //Disenable button
+                But_ADDTT.setEnabled(false);
+                //Xóa table
+                dsTT.removeRowSelectionInterval(0, dsTT.getRowCount()-1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(XTT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Search(String ma){
         String cmd = "select LTT,[Số lượng]=count(LTT)";
         try {
                 jThongBao.setVisible(false);
@@ -222,12 +297,13 @@ public class XTT extends javax.swing.JInternalFrame {
                 ResultSet res;
                 cmd+=" from TT where ID like ? group by LTT";
                 pre=SQL.getConnection().prepareStatement(cmd);
-                pre.setString(1, jtxTenOrMa.getText());
+                pre.setString(1, ma);
                 res=pre.executeQuery(); 
                 if(res.isBeforeFirst()==true){
                     tb.setRowCount(0);
                     int i=1;
                     Vector data;
+                    But_ADDTT.setEnabled(true);
                     while(res.next()){
                         data=new Vector();
                         data.add(i);
@@ -250,7 +326,7 @@ public class XTT extends javax.swing.JInternalFrame {
     }
     private void But_TimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_TimMouseClicked
         // TODO add your handling code here:
-        Search();
+        Search_TV(Txt_ID.getText());
     }//GEN-LAST:event_But_TimMouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
@@ -260,28 +336,49 @@ public class XTT extends javax.swing.JInternalFrame {
 
     private void But_ADDTTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADDTTMouseClicked
         // TODO add your handling code here:
-        if(jtxTenOrMa.getText().isEmpty()||jtxTenOrMa.getText().length()<7||jtxTenOrMa.getText().length()>8) {
-            JOptionPane.showMessageDialog(this, "Mã thành viên không hợp lệ!","Lỗi",1);
+//        data=new String[]{Txt_ID.getText()};
+//        Bridge.setData(data);
+        String a=new String(Txt_ID.getText());
+        MAIN.a.getJDesktop().add(new ADD_TT(a));
+    }//GEN-LAST:event_But_ADDTTMouseClicked
+
+    private void Txt_IDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Txt_IDKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()==65535||edit==false){
             return;
         }
-        data=new String[]{jtxTenOrMa.getText()};
-        Bridge.setData(data);
-        MAIN.a.getJDesktop().add(new ADD_TT());
-    }//GEN-LAST:event_But_ADDTTMouseClicked
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER){
+            Search_TV(Txt_ID.getText());
+            return;
+        }
+        if(Txt_ID.getText().length()==6||Txt_ID.getText().length()==7){ // Nếu độ dài phù hợp
+            Search_TV(Txt_ID.getText()+evt.getKeyChar());               //Hàm xuất thông tin thành viên và lieetk kê thành tích của thành viên
+        } else {    //Nếu không phù hợp
+            Txt_HVT.setText("");
+            Txt_NS.setText("");
+            //Xóa table
+            dsTT.removeRowSelectionInterval(0, dsTT.getRowCount()-1);
+            But_ADDTT.setEnabled(false);
+        }
+    }//GEN-LAST:event_Txt_IDKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton But_ADDTT;
     private javax.swing.JButton But_Tim;
+    private javax.swing.JTextField Txt_HVT;
+    private javax.swing.JTextField Txt_ID;
+    private javax.swing.JTextField Txt_NS;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTable dsTT;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jTenOrMa;
     private javax.swing.JDialog jThongBao;
-    private javax.swing.JTextField jtxTenOrMa;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,11 +27,8 @@
           <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="But_Them" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="But_Them" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="145" max="32767" attributes="0"/>
               <Component id="But_Dong" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
           </Group>
@@ -162,7 +159,7 @@
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Tx_ThanhVM" alignment="3" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="21" max="32767" attributes="0"/>
+              <EmptySpace pref="23" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -192,14 +189,12 @@
                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="C_NgheNghiep" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace pref="16" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="But_Them" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="But_Dong" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -240,11 +235,10 @@
       <Properties>
         <Property name="maximumRowCount" type="int" value="4"/>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Ch&#x1ecd;n..."/>
-            <StringItem index="1" value="Ch&#x1ed3;ng"/>
-            <StringItem index="2" value="V&#x1ee3;"/>
-            <StringItem index="3" value="Con"/>
+          <StringArray count="3">
+            <StringItem index="0" value="Ch&#x1ed3;ng"/>
+            <StringItem index="1" value="V&#x1ee3;"/>
+            <StringItem index="2" value="Con"/>
           </StringArray>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -273,10 +267,9 @@
     <Component class="javax.swing.JComboBox" name="C_GioiTinh">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="Gi&#x1edb;i t&#xed;nh"/>
-            <StringItem index="1" value="Nam"/>
-            <StringItem index="2" value="N&#x1eef;"/>
+          <StringArray count="2">
+            <StringItem index="0" value="Nam"/>
+            <StringItem index="1" value="N&#x1eef;"/>
           </StringArray>
         </Property>
       </Properties>
@@ -419,12 +412,11 @@
     <Component class="javax.swing.JComboBox" name="C_QueQuan">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="Ch&#x1ecd;n..."/>
-            <StringItem index="1" value="H&#xe0; N&#x1ed9;i"/>
-            <StringItem index="2" value="&#x110;&#xe0; N&#x1eb5;ng"/>
-            <StringItem index="3" value="TP.H&#x1ed3; Ch&#xed; Minh"/>
-            <StringItem index="4" value="&#x110;&#x1ed3;ng B&#x1eb1;ng S&#xf4;ng C&#x1eed;u Long"/>
+          <StringArray count="4">
+            <StringItem index="0" value="H&#xe0; N&#x1ed9;i"/>
+            <StringItem index="1" value="&#x110;&#xe0; N&#x1eb5;ng"/>
+            <StringItem index="2" value="TP.H&#x1ed3; Ch&#xed; Minh"/>
+            <StringItem index="3" value="&#x110;&#x1ed3;ng B&#x1eb1;ng S&#xf4;ng C&#x1eed;u Long"/>
           </StringArray>
         </Property>
       </Properties>
@@ -470,11 +462,6 @@
       <Events>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Tx_MaTVCKeyPressed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&#x110;&#xe3; th&#xea;m th&#xe0;nh c&#xf4;ng"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>

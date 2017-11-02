@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author ADT
  */
 public class SMT extends javax.swing.JInternalFrame {
-
+    private boolean selectTV=true;
     /**
      * Creates new form SMT
      */
@@ -22,7 +22,13 @@ public class SMT extends javax.swing.JInternalFrame {
         initComponents();
         setVisible(true);
     }
-
+    public SMT(String ma){
+        initComponents();
+        MaTV.setText(ma);
+        MaTV.setEditable(false);
+        selectTV=false;
+        setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,7 +78,7 @@ public class SMT extends javax.swing.JInternalFrame {
         });
 
         C_ddmaitang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        C_ddmaitang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "                     ", "TP.Hồ Chí Minh", "TP.Đà Nẵng", "TP.Hà Nôi" }));
+        C_ddmaitang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TP.Hồ Chí Minh", "TP.Đà Nẵng", "TP.Hà Nôi" }));
         C_ddmaitang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 C_ddmaitangActionPerformed(evt);
@@ -80,7 +86,7 @@ public class SMT extends javax.swing.JInternalFrame {
         });
 
         C_nguyennhan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        C_nguyennhan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "                 ", "Bệnh Lao", "Ung Thư", "Chấn Thương Sọ Não", "Tai Nạn Xe Cộ", "Bệnh Gan", "Bệnh Phổi", "Đột Quỵ", "Bệnh Tim", "Kháng Chiến", "Bệnh HIV", "Bệnh Sốt Xuất Huyết", "Bệnh H5N1", " " }));
+        C_nguyennhan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bệnh Lao", "Ung Thư", "Chấn Thương Sọ Não", "Tai Nạn Xe Cộ", "Bệnh Gan", "Bệnh Phổi", "Đột Quỵ", "Bệnh Tim", "Kháng Chiến", "Bệnh HIV", "Bệnh Sốt Xuất Huyết", "Bệnh H5N1", "" }));
         C_nguyennhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 C_nguyennhanActionPerformed(evt);
@@ -176,44 +182,39 @@ public class SMT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
-        
-        
-        String sql = "update KT set NN = N'"+C_nguyennhan.getItemAt(C_nguyennhan.getSelectedIndex())+"'";
-        String sql1= " from TV a where KT.ID like '"+MaTV.getText()+"'";
-        String sql2 = "update KT set NMT = N'"+C_ddmaitang.getItemAt(C_ddmaitang.getSelectedIndex())+"'";
-        String sql3 = " from TV a where KT.ID like '"+MaTV.getText()+"'";
-        String timma=" select ID from TV where ID like '" + MaTV.getText() + "'";
-        ResultSet res=null;
         try {
+            // TODO add your handling code here:
+            String sql = "update KT set NN = N'"+C_nguyennhan.getItemAt(C_nguyennhan.getSelectedIndex())+"'";
+            String sql1= " from TV a where KT.ID like '"+MaTV.getText()+"'";
+            String sql2 = "update KT set NMT = N'"+C_ddmaitang.getItemAt(C_ddmaitang.getSelectedIndex())+"'";
+            String sql3 = " from TV a where KT.ID like '"+MaTV.getText()+"'";
+            String timma=" select ID from KT where ID like '" + MaTV.getText() + "'";
+            ResultSet res=null;
+            
             Statement ma = SQL.getConnection().createStatement();
-            res=ma.executeQuery(timma);
-        } catch (SQLException ex) {
-            Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if(MaTV.getText().isEmpty())
-           jLabel2.setText("Hãy nhập mã thành viên!");
-        else
-                try {
-                    if(res.isBeforeFirst());
+
+            
+            if(selectTV){
+                if(MaTV.getText().isEmpty()) {
+                    jLabel2.setText("Hãy nhập mã thành viên!");
+                } else {
+                    res=ma.executeQuery(timma);
+                    if(!res.isBeforeFirst());
                     else{
-                        jLabel2.setText("Không tìm thấy người này!");
+                        jLabel2.setText("Không tìm thấy giấy tử!");
                         jLabel2.setVisible(true);
                         return;
                     }
+                }
+            }
+            
+            Statement sta=SQL.getConnection().createStatement();
+            sta.executeUpdate(sql+sql1);
+            sta.executeUpdate(sql2+sql3);
+            jLabel2.setText("Sửa thành công.");
         } catch (SQLException ex) {
             Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-        Statement sta=SQL.getConnection().createStatement();
-        sta.executeUpdate(sql+sql1);
-        sta.executeUpdate(sql2+sql3);
-        jLabel2.setText("Sua thanh cong.");
-        } catch (SQLException ex) {
- //           Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
-            jLabel2.setText("Sua That bai.");
+            jLabel2.setText("Sửa thất bại.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

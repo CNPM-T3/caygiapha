@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,30 +37,24 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         ngay.setText(df.format(date));
         model = (DefaultTableModel) bang.getModel();
         model.setRowCount(0);
-        if(Bridge.isOpen()){
-            try {
-                edit=false;
-                String[] data=Bridge.getData();
-                matv.setText(data[0]);
-                ResultSet res=Search_TT(matv.getText());
-                if(res.isBeforeFirst()){
-                    res.next();
-                    hoVaTen.setText(res.getString(1));
-                    ngaySinh.setText(df.format(res.getDate(2)));
-                }
-                matv.setEditable(false);
-                hoVaTen.setEditable(false);
-                ngaySinh.setEditable(false);
-            
-            } catch (SQLException ex) {
-                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         setVisible(true);
         hoVaTen.setEnabled(false);
         ngaySinh.setEnabled(false);
     }
-
+    
+    public ADD_TT(String ma){
+        initComponents();
+        ngay.setText(df.format(date));
+        model = (DefaultTableModel) bang.getModel();
+        model.setRowCount(0);
+        edit=false;
+        matv.setText(ma);
+        Search_TT(matv.getText());
+        matv.setEditable(false);
+        hoVaTen.setEditable(false);
+        ngaySinh.setEditable(false);
+        setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -273,15 +268,25 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private ResultSet Search_TT(String ID){
+    private void  Search_TT(String ID){
         try {
             String cmd = "select HVT,NS from TV where ID like ?";
             PreparedStatement ps= SQL.getConnection().prepareStatement(cmd);
             ps.setString(1, ID);
-            return ps.executeQuery();
+//            return ps.executeQuery();
+            ResultSet res=ps.executeQuery();
+            if(res.isBeforeFirst()){
+                res.next();
+                hoVaTen.setText(res.getString(1));
+                ngaySinh.setText(df.format(res.getDate(2)));
+                BThem.setEnabled(true);
+            } else {
+                hoVaTen.setText("");
+                ngaySinh.setText("");
+                BThem.setEnabled(true);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
     }
     
@@ -301,10 +306,32 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     private void BThemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BThemMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_BThemMouseClicked
-
+    
+    private boolean Check_Date(){
+        String cmd="select (case when ?<? then 1 else 0 end)";
+        PreparedStatement pre;
+        ResultSet re;
+        try {
+            pre=SQL.getConnection().prepareStatement(cmd);
+            pre.setString(1, ngay.getText());
+            pre.setString(2, ngaySinh.getText());
+            re=pre.executeQuery();
+            re.next();
+            if(re.getInt(1)==1){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     private void BThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BThemActionPerformed
                 // TODO add your handling code here
-                
+                if(Check_Date()){
+                    JOptionPane.showMessageDialog(this, "Ngày phát sinh không hợp lê!","Lỗi",1);
+                    return;
+                }
                 PreparedStatement pre=null;
                 ResultSet res=null;
             try {
@@ -323,14 +350,17 @@ public class ADD_TT extends javax.swing.JInternalFrame {
                     if(pre.executeUpdate()>0){
                         String[] a=new String []{matv.getText(),Cltt.getSelectedItem().toString(),ngay.getText()};
                         model.addRow(a);
-                        Lthongbao.setText("Thêm thành công!");
+                        JOptionPane.showMessageDialog(this, "Thêm thành công!","Thông báo",1);
                     }  
                 } else{
-                        Lthongbao.setText("Thông tin này đã có!");
-                        Cltt.setEnabled(false);}
+                        JOptionPane.showMessageDialog(this, "Thông tin này đã có!","Thông báo",1);
+                }
             } catch (SQLException ex) {
-                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-                Lthongbao.setText("Thêm thất bại!");
+                int begin=ex.getMessage().indexOf("\"")+1;
+                int end = ex.getMessage().indexOf("\". ");
+                JOptionPane.showMessageDialog(this,ex.getMessage().substring(begin, end),"Lỗi", 1);
+//                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+//                Lthongbao.setText("Thêm thất bại!");
             }
     }//GEN-LAST:event_BThemActionPerformed
 
@@ -341,78 +371,23 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
         // TODO add your handling code here:
         //------Phần của Tuyến------
-         ResultSet res;
-        if(evt.getKeyChar()==65535) {
+         ResultSet res = null;
+        if(evt.getKeyChar()==65535||edit==false) {
             return;
         }
-        if(edit){
             if(evt.getKeyChar()==KeyEvent.VK_ENTER){
-                try {
-                    res=Search_TT(matv.getText());
-                    if(res.isBeforeFirst()){
-                        res.next();
-                        hoVaTen.setText(res.getString(1));
-                        ngaySinh.setText(df.format(res.getDate(2)));
-                    } else {
-                        hoVaTen.setText("");
-                        ngaySinh.setText("");
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-                    hoVaTen.setText("");
-                    ngaySinh.setText("");
-                }
+                Search_TT(matv.getText());
+                return;
+            }
+                
+            if(matv.getText().length()>=6&&matv.getText().length()<=7){
+                Search_TT(matv.getText()+evt.getKeyChar());
             } else {
-                if(matv.getText().length()>=6&&matv.getText().length()<=7){
-                    try {
-                        res = Search_TT(matv.getText()+evt.getKeyChar());
-                        if(res.isBeforeFirst()){
-                            res.next();
-                            hoVaTen.setText(res.getString(1));
-                            ngaySinh.setText(df.format(res.getDate(2)));
-                        } else {
-                            hoVaTen.setText("");
-                            ngaySinh.setText("");
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-                        hoVaTen.setText("");
-                        ngaySinh.setText("");
-                    }
-                }
+                hoVaTen.setText("");
+                ngaySinh.setText("");
+                BThem.setEnabled(false);
             }
-        }
-        //------Phần của Phúc------
-        if(evt.getKeyChar()==KeyEvent.VK_ENTER){
-          Statement s;
-          ResultSet r;
-          String a="select HVT,NS from TV where ID like '"+matv.getText()+"'";
-          
-          if(matv.getText().isEmpty())
-          {
-              Lthongbao.setText("Hãy nhập mã thành viên!");
-              Cltt.setEnabled(false);
-          }
-          else{ 
-            try {
-                s=SQL.getConnection().createStatement();
-                r=s.executeQuery(a);
-                if(r.next()==true){
-                    hoVaTen.setText(r.getString(1));
-                    ngaySinh.setText(r.getString(2));
-                }else{
-                    hoVaTen.setText("");
-                    ngaySinh.setText("");
-                    Cltt.setEnabled(false);
-                    Lthongbao.setText("Không tìm thấy người này!");
-                    Lthongbao.setVisible(true);                    
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
-            }
-             return;   
-           }
-        }
+        //------Phần của Phúc-----
     }//GEN-LAST:event_matvKeyPressed
 
 

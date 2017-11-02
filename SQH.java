@@ -8,8 +8,11 @@ package caygiapha;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,15 +23,26 @@ public class SQH extends javax.swing.JInternalFrame {
     /**
      * Creates new form SQH_1
      */
+    private String nstvc;
+    private String gt;
+    DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
     public SQH() {
         initComponents();
-        ttv.setEnabled(false);
-        ns.setEnabled(false);
-        ttvc.setEnabled(false);
-        qhc.setEnabled(false);
+//        ttv.setEditable(false);
+//        ns.setEditable(false);
+//        ttvc.setEditable(false);
+//        qhc.setEditable(false);
         setVisible(true);
     }
-
+    
+    public SQH(String ma){
+        initComponents();
+        matv.setText(ma);
+        matv.setEditable(false);
+        Search(matv.getText());
+        setVisible(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -99,6 +113,7 @@ public class SQH extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Tên thành viên:");
 
+        ttv.setEditable(false);
         ttv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ttvActionPerformed(evt);
@@ -107,6 +122,7 @@ public class SQH extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Ngày sinh:");
 
+        ns.setEditable(false);
         ns.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nsActionPerformed(evt);
@@ -115,6 +131,7 @@ public class SQH extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Tên thành viên cũ:");
 
+        ttvc.setEditable(false);
         ttvc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ttvcActionPerformed(evt);
@@ -123,6 +140,7 @@ public class SQH extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Quan hệ cũ");
 
+        qhc.setEditable(false);
         qhc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 qhcActionPerformed(evt);
@@ -207,8 +225,59 @@ public class SQH extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void Search(String ma){
+        String cmd="select T.HVT,T.NS,T1.HVT,QH,T1.NS,T.GT from TV T left outer join QH Q on T.ID=Q.ID left outer join TV T1 on ID_O=T1.ID where T.ID like ?";
+        try(PreparedStatement pre=SQL.getConnection().prepareStatement(cmd)) {
+            pre.setString(1, ma);
+            ResultSet r=pre.executeQuery();
+            if(r.next()==true){
+                    ttv.setText(r.getString(1));
+                    ns.setText(df.format(r.getDate(2)));
+                    ttvc.setText(r.getString(3));
+                    qhc.setText(r.getString(4));
+                    nstvc=df.format(r.getDate(5));
+                    gt=r.getString(6);
+                    ltb.setText("");
+                }else{
+                    ttv.setText("");
+                    ns.setText("");
+                    ttvc.setText("");
+                    qhc.setText("");
+                    Cqh.setEnabled(false);
+                    ltb.setText("Không tìm thấy người này!");
+                    ltb.setVisible(true);
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private boolean CheckYear(){
+        try {
+            String cmd = "select (case when dateadd(year,15,?)>? then 1 else 0 end)";
+            PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
+            pre.setString(1, nstvc);
+            pre.setString(2, ns.getText());
+            ResultSet re=pre.executeQuery();
+            re.next();
+            return re.getBoolean(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+    }
+    
     private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
         // TODO add your handling code here:
+        if(CheckYear() && Cqh.getSelectedIndex()==2){
+            JOptionPane.showMessageDialog(this, "Cha/mẹ phải hơn con tối thiểu 15 tuổi.","Lỗi",1);
+            return;
+        }
+        if((gt.compareTo("Nam")==0&&Cqh.getSelectedIndex()==0)||(gt.compareTo("Nữ")==0&&Cqh.getSelectedIndex()==1)){
+            JOptionPane.showMessageDialog(this, "Quan hệ không hợp lệ.","Lỗi",1);
+            return;
+        }
         String sql = "update QH set QH = N'" + Cqh.getItemAt(Cqh.getSelectedIndex()) +"'";
         String sql1= " where ID like '"+matv.getText()+"'";
         String timma=" select ID from TV where ID like '" + matv.getText() + "'";
@@ -281,39 +350,7 @@ public class SQH extends javax.swing.JInternalFrame {
     private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
         // TODO add your handling code here:        
         if(evt.getKeyChar()==KeyEvent.VK_ENTER){
-          Statement s;
-          ResultSet r;
-          String a="select a.HVT,a.NS,c.HVT,QH from TV a, QH b, TV c where a.ID = b.ID and b.ID_O = c.ID and a.ID like '"+matv.getText()+"'";
-          
-          if(matv.getText().isEmpty())
-          {    
-              ltb.setText("Hãy nhập mã thành viên!");
-              Cqh.setEnabled(false);
-          }
-          else{ 
-            try {
-                s=SQL.getConnection().createStatement();
-                r=s.executeQuery(a);
-                if(r.next()==true){
-                    ttv.setText(r.getString(1));
-                    ns.setText(r.getString(2));
-                    ttvc.setText(r.getString(3));
-                    qhc.setText(r.getString(4));
-                    ltb.setText("");
-                }else{
-                    ttv.setText("");
-                    ns.setText("");
-                    ttvc.setText("");
-                    qhc.setText("");
-                    Cqh.setEnabled(false);
-                    ltb.setText("Không tìm thấy người này!");
-                    ltb.setVisible(true);
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(SQH.class.getName()).log(Level.SEVERE, null, ex);
-            }
-             return;   
-           }
+          Search(matv.getText());
         }
         
     }//GEN-LAST:event_matvKeyPressed

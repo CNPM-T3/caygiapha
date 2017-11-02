@@ -5,7 +5,6 @@
  */
 
 package caygiapha;
-import java.util.Date;
 import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.text.DateFormat;
@@ -25,6 +24,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         Calendar cal= Calendar.getInstance();
         DefaultTableModel model;
         boolean edit=true;
+        boolean firt=false;
         int selectday=0;
         int groupmonth=1;
     /**
@@ -32,42 +32,72 @@ public class ADD_TV extends javax.swing.JInternalFrame {
      */
     public ADD_TV() {
         initComponents();
-        jLabel9.setVisible(false);
         C_NamPS.setText(df.format(date));
-        Date n=new Date();
         LoadDate();
-        if(Bridge.isOpen()){
-            String[] data=Bridge.getData();
-            Tx_MaTVC.setText(data[0]);
-            Tx_MaTVC.setEditable(false);
-            But_Tim.setEnabled(false);
-            edit=false;
-            Search();
-        }
+        C_QuanHe.setEnabled(false);
+        But_Them.setEnabled(false);
+        Search_01();
         setVisible(true);
         
     }
-    private void Search(){
+    public ADD_TV(String ma){
+        initComponents();
+        C_NamPS.setText(df.format(date));
+        LoadDate();
+        Tx_MaTVC.setText(ma);
+        Tx_MaTVC.setEditable(false);
+        But_Tim.setEnabled(false);
+        But_Tim.setEnabled(false);
+        edit=false;
+        Search(Tx_MaTVC.getText());
+        setVisible(true);
+    }
+    
+    private void Search_01(){
+            try {
+                String cmd="select * from TV where ID like '01%' and len(ID)=7";
+                ResultSet re=SQL.getConnection().createStatement().executeQuery(cmd);
+                if(re.isBeforeFirst());
+                else {
+                    Tx_MaTVC.setEditable(false);
+                    But_Them.setEnabled(true);
+                    C_QuanHe.setEnabled(false);
+                    But_Tim.setEnabled(false);
+                    edit=false;
+                    firt=true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }
+    
+    private void Search(String ma){
             try {
                 String cmd ="select HVT,GT,NS from TV where ID = ?";
                 PreparedStatement ps=SQL.getConnection().prepareStatement(cmd);
-                ps.setString(1, Tx_MaTVC.getText());
+                ps.setString(1, ma);
                 ResultSet re = ps.executeQuery();
                 if(re.isBeforeFirst()){
                     re.next();
                     Tx_ThanhVienCu.setText(re.getString(1));
                     Txt_GT.setText(re.getString(2));
-                    Txt_NS.setText(re.getString(3));
+                    Txt_NS.setText(df.format(re.getDate(3)));
+                    C_QuanHe.setEnabled(true);
+                    But_Them.setEnabled(true);
                 } else {
                     Tx_ThanhVienCu.setText("");
                     Txt_GT.setText("");
                     Txt_NS.setText("");
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên này!","Lỗi",1);
+                    C_QuanHe.setEnabled(false);
+                    But_Them.setEnabled(false);
                 }
             } catch (SQLException ex) {
                 Tx_ThanhVienCu.setText("");
                 Txt_GT.setText("");
                 Txt_NS.setText("");
+                C_QuanHe.setEnabled(false);
+                But_Them.setEnabled(false);
                 Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
             }
         
@@ -99,6 +129,14 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     }
 
     private String Get_ID(){
+        if(firt){
+            Tx_MaTVC.setEditable(true);
+            But_Them.setEnabled(false);
+            But_Tim.setEnabled(true);
+            edit=true;
+            firt=false;
+            return "01ABC01";
+        }
         ResultSet res;
         PreparedStatement pre;
         if(C_QuanHe.getSelectedItem().toString().equals("Vợ")||C_QuanHe.getSelectedItem().toString().equals("Chồng")){  //Xét quan hệ
@@ -183,7 +221,6 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         C_NgheNghiep = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         Tx_MaTVC = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         Txt_GT = new javax.swing.JTextField();
@@ -214,7 +251,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         jLabel5.setText("Quan hệ:");
 
         C_QuanHe.setMaximumRowCount(4);
-        C_QuanHe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn...", "Chồng", "Vợ", "Con" }));
+        C_QuanHe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chồng", "Vợ", "Con" }));
         C_QuanHe.setToolTipText("");
         C_QuanHe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,7 +263,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Thành viên mới:");
 
-        C_GioiTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giới tính", "Nam", "Nữ" }));
+        C_GioiTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
         C_GioiTinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 C_GioiTinhActionPerformed(evt);
@@ -291,7 +328,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             }
         });
 
-        C_QueQuan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn...", "Hà Nội", "Đà Nẵng", "TP.Hồ Chí Minh", "Đồng Bằng Sông Cửu Long" }));
+        C_QueQuan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hà Nội", "Đà Nẵng", "TP.Hồ Chí Minh", "Đồng Bằng Sông Cửu Long" }));
         C_QueQuan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 C_QueQuanActionPerformed(evt);
@@ -307,8 +344,6 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 Tx_MaTVCKeyPressed(evt);
             }
         });
-
-        jLabel9.setText("Đã thêm thành công");
 
         jLabel7.setText("Giới tính:");
 
@@ -336,10 +371,8 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(But_Them)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(But_Them)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                 .addComponent(But_Dong)
                 .addGap(99, 99, 99))
             .addGroup(layout.createSequentialGroup()
@@ -441,7 +474,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(Tx_ThanhVM))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11)
@@ -466,13 +499,11 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(C_NgheNghiep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(But_Them)
                     .addComponent(But_Dong))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addContainerGap())
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -489,12 +520,12 @@ public class ADD_TV extends javax.swing.JInternalFrame {
             return;
         char chr=evt.getKeyChar();
         
-        if(chr==65535 || chr==KeyEvent.VK_DELETE || chr==KeyEvent.VK_BACK_SPACE){
+        if(chr==65535){
             return;
         }
         
         if(chr==KeyEvent.VK_ENTER){
-          Search();
+          Search(Tx_MaTVC.getText());
              return;   
         }
        
@@ -502,35 +533,14 @@ public class ADD_TV extends javax.swing.JInternalFrame {
         String id= Tx_MaTVC.getText();
         int len=id.length();
         if(len==6 || len==7){
-            
-          Statement s;
-          ResultSet r;
-          String a="select HVT,GT,NS from TV where ID like '"+id+chr+"'" ;
-          
-            try {
-                s=SQL.getConnection().createStatement();
-                r=s.executeQuery(a);
-                if(r.next()==true){
-                    Tx_ThanhVienCu.setText(r.getString(1));
-                    Txt_GT.setText(r.getString(2));
-                    Txt_NS.setText(r.getString(3));
-                }else{
-                    Tx_ThanhVienCu.setText("");
-                    Txt_GT.setText("");
-                    Txt_NS.setText("");
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên này!","Lỗi",1);
-                }
-               
-            } catch (SQLException ex) {
-                Tx_ThanhVienCu.setText("");
-                Txt_GT.setText("");
-                Txt_NS.setText("");
-                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
-            }
-          
+            Search(Tx_MaTVC.getText()+evt.getKeyChar());
         }
         else{
             Tx_ThanhVienCu.setText("");
+            Txt_GT.setText("");
+            Txt_NS.setText("");
+            C_QuanHe.setEnabled(false);
+            But_Them.setEnabled(false);
         }
     }//GEN-LAST:event_Tx_MaTVCKeyPressed
 
@@ -568,30 +578,46 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
     }
     
+    private boolean Check_Year(String ns){
+            try {
+                String cmd="select (case when dateadd(year,15,?)>? then 1 else 0 end)";
+                PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
+                pre.setString(1, Txt_NS.getText());
+                pre.setString(2, ns);
+                ResultSet re=pre.executeQuery();
+                re.next();
+                return re.getBoolean(1);
+            } catch (SQLException ex) {
+                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
+                return true;
+            }
+    }
+    
+    private boolean Check_GT(){
+        return Txt_GT.getText().compareTo(C_GioiTinh.getSelectedItem().toString())==0 && C_QuanHe.getSelectedItem().toString().compareTo("Con")!=0;
+    }
+    
+    private  boolean Check_QH(){
+        return (Txt_GT.getText().compareTo("Nữ")==0 && C_QuanHe.getSelectedItem().toString().compareTo("Vợ")==0) || (Txt_GT.getText().compareTo("Nam")==0 && C_QuanHe.getSelectedItem().toString().compareTo("Chồng")==0);
+    }
+    
     private void But_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ThemActionPerformed
             try {
-               Statement a=null;
-                ResultSet r;
-                Date n = new Date();
-                Date nsc = null;
-                try{
-                String S="select ns from tv where id like '"+Tx_MaTVC.getText()+"'";
-                a=SQL.getConnection().createStatement();
-                r=a.executeQuery(S);
-                r.next();
-                nsc = r.getDate(1);
-                }
-            catch (SQLException ex) {
-                Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
-                return;
-            }
-                String qh=C_QuanHe.getSelectedItem().toString();
-                String gt=C_GioiTinh.getSelectedItem().toString();
-                Date nsD= new Date((Integer.valueOf(Tx_NamS.getText())-1900)-15,C_ThangS.getSelectedIndex(),C_NgayS.getSelectedIndex()+1);
-               // String nc = new String((String)ngaymat.getSelectedItem()+"/"+(String)thangmat.getSelectedItem()+"/"+nammat.getText());
                 String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
-                String ID=Get_ID();
                 String ns=C_NgayS.getSelectedItem().toString()+"/"+C_ThangS.getSelectedItem().toString()+"/"+Tx_NamS.getText();
+                if(C_QuanHe.getSelectedIndex()==3 && Check_Year(ns)) {
+                    JOptionPane.showMessageDialog(this, "Cha/mẹ phải hơn con 15 trở lên.","Lỗi",1);
+                    return;
+                }
+                if(Check_GT()){
+                    JOptionPane.showMessageDialog(this, "Giới tính không hợp lệ.","Lỗi",1);
+                    return;
+                }
+                if(Check_QH()){
+                    JOptionPane.showMessageDialog(this, "Quan hê không hợp lệ.","Lỗi",1);
+                    return;
+                }
+                String ID= Get_ID();
                 PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
                 pre.setString(1, ID);
                 pre.setString(2, Tx_ThanhVM.getText());
@@ -600,11 +626,13 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 pre.setString(5, C_QueQuan.getSelectedItem().toString());
                 pre.setString(6, C_NgheNghiep.getSelectedItem().toString());
                 pre.setString(7, Tx_DiaChi.getText());
+
                 pre.setString(8, ID);
                 pre.setString(9, C_NamPS.getText());
                 pre.setString(10, C_QuanHe.getSelectedItem().toString());
                 pre.setString(11, Tx_MaTVC.getText());
                 pre.execute();
+                JOptionPane.showMessageDialog(this,"Thêm thành công" ,"Thông báo",1);
                 C_QuanHe.setSelectedIndex(0);
                 Tx_ThanhVM.setText("");
                 C_NgayS.setSelectedIndex(0);
@@ -614,23 +642,18 @@ public class ADD_TV extends javax.swing.JInternalFrame {
                 C_QueQuan.setSelectedIndex(0);
                 Tx_DiaChi.setText("");
                 C_NgheNghiep.setSelectedIndex(0);
-                if(edit) {
-                    Tx_MaTVC.setText("");
-                    Tx_ThanhVienCu.setText("");
-                    Txt_GT.setText("");
-                    Txt_NS.setText("");
-                }
-                if(nsc.after(nsD) && qh=="Con" || qh =="Vợ" && gt=="Nam" || qh=="Chồng" && gt=="Nữ"){
-                    JOptionPane.showMessageDialog(this,"Lỗi","Thông báo",1);
-                }
-                else {
-                    JOptionPane.showMessageDialog(this,"Thêm thành công","Thông báo",1);
-                };
+//                if(edit) {
+//                    Tx_MaTVC.setText("");
+//                    Tx_ThanhVienCu.setText("");
+//                    Txt_GT.setText("");
+//                    Txt_NS.setText("");
+//                }
+                
             } catch (SQLException ex) {
 //                int begin=ex.getMessage().indexOf("\"")+1;
 //                int end=ex.getMessage().indexOf("\". ");
-//                JOptionPane.showMessageDialog(this,ex.getMessage().substring(begin,end),Integer.toString(ex.getErrorCode()),1);
-                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this,ex.getMessage(),Integer.toString(ex.getErrorCode()),1);
+//                Logger.getLogger(ADD_TV.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         
@@ -646,7 +669,7 @@ public class ADD_TV extends javax.swing.JInternalFrame {
 
     private void But_TimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_TimMouseClicked
         // TODO add your handling code here:
-        Search();
+        Search(Tx_MaTVC.getText());
     }//GEN-LAST:event_But_TimMouseClicked
 
     private void C_ThangSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_C_ThangSActionPerformed
@@ -725,6 +748,5 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }

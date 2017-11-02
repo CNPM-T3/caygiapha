@@ -7,9 +7,10 @@ package caygiapha;
 
 import java.awt.event.KeyEvent;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,17 +20,31 @@ public class SQQNN extends javax.swing.JInternalFrame {
     /**
      * Creates new form SQQNN_1
      */
-    DefaultTableModel model;
-    
+    private boolean edit=true;
+    DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
     public SQQNN() {
         initComponents();
-        ttv.setEnabled(false);
-        ns.setEnabled(false);
-        nnc.setEnabled(false);
-        qqc.setEnabled(false);
+        ttv.setEditable(false);
+        ns.setEditable(false);
+        nnc.setEditable(false);
+        qqc.setEditable(false);
+        LoadData(matv.getText());
         setVisible(true);
     }
-
+    
+    public SQQNN(String ma){
+        initComponents();
+        ttv.setEditable(false);
+        ns.setEditable(false);
+        nnc.setEditable(false);
+        qqc.setEditable(false);
+        matv.setText(ma);
+        matv.setEditable(false);
+        edit=false;
+        LoadData(matv.getText());
+        setVisible(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,7 +108,7 @@ public class SQQNN extends javax.swing.JInternalFrame {
             }
         });
 
-        Csnn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Không có", "Nội trợ", "Giúp việc", "Giáo viên", "Giảng viên", "Thợ rèn", "Thợ tiện", "Thợ điện", "Nhân viên văn phòng", "Bác sĩ", "Y tá", "Dược sĩ", "Điều dưỡng", "Xây dựng", "Kỹ sư tin học" }));
+        Csnn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Không", "Giúp việc", "Giáo viên", "Giảng viên", "Thợ rèn", "Thợ tiện", "Thợ điện", "Nhân viên văn phòng", "Bác sĩ", "Y tá", "Dược sĩ", "Điều dưỡng", "Xây dựng", "Kỹ sư tin học", "Nghệ sĩ" }));
         Csnn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CsnnActionPerformed(evt);
@@ -102,6 +117,7 @@ public class SQQNN extends javax.swing.JInternalFrame {
 
         Bxacnhan.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         Bxacnhan.setText("XÁC NHẬN");
+        Bxacnhan.setEnabled(false);
         Bxacnhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BxacnhanActionPerformed(evt);
@@ -205,57 +221,75 @@ public class SQQNN extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
-        // TODO add your handling code here:
-        String sql = "update TV set QQ = N'" + Csqq.getItemAt(Csqq.getSelectedIndex()) +"'";
-        String sql1= " from TV a where ID like '"+matv.getText()+"'";
-        String sql2 = "update TV set NN = N'"+ Csnn.getItemAt(Csnn.getSelectedIndex()) +"'";
-        String timma=" select ID from TV a where ID like '"+matv.getText()+"'";
-        ResultSet res = null;
-        try {
-            Statement ma = SQL.getConnection().createStatement();
-            //lấy kết quả(result) từ việc thực thi lệnh(Statement)
-            res=ma.executeQuery(timma);
-        } catch (SQLException ex) {
-            Logger.getLogger(SQQNN.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-        
-        if(matv.getText().isEmpty())
-        {
-                ltb.setText("Hãy nhập mã thành viên!");
-                Csqq.setEnabled(false);
-                Csnn.setEnabled(false);
+    private void LoadData(String ma){
+        //Kiểm tra mã thành viên
+        if(ma.isEmpty()){
+            //Xuất thông báo khi mã thành viên bị bỏ trống
+            ltb.setText("Hãy nhập mã thành viên!");
+            Csqq.setEnabled(false);
+            Csnn.setEnabled(false);
+            Bxacnhan.setEnabled(false);
+            return;
         }
-        else
-        {
-            //Xét xem mã có trong ds tv hay không
-            try {
-                if(res.isBeforeFirst());//xác đinh coi có(true) hay không(false)
-                else {
+        
+        ltb.setText("");
+        //Khai báo câu lệnh tìm kiếm thông tin thành viên
+        String cmd="select HVT,NS,QQ,NN from TV where ID like ?";
+        try (PreparedStatement pre = SQL.getConnection().prepareStatement(cmd)) {
+                pre.setString(1, ma);
+                ResultSet re=pre.executeQuery();
+                if(re.isBeforeFirst()){
+                    re.next();
+                    ttv.setText(re.getString(1));
+                    ns.setText(df.format(re.getDate(2)));
+                    qqc.setText(re.getString(3));
+                    nnc.setText(re.getString(4));
+                    //Enable cho các combobox và nút
+                    Bxacnhan.setEnabled(true);
+                    Csqq.setEnabled(true);
+                    Csnn.setEnabled(true);
+                    ltb.setText("");
+                } else {
+                    //Disenable các combobox và nút nếu không tìm thấy thành viên
+                    Bxacnhan.setEnabled(false);
                     Csqq.setEnabled(false);
                     Csnn.setEnabled(false);
-                    ltb.setText("Không tìm thấy người này.");
-                    ltb.setVisible(true);
-                    return;
+                    ttv.setText("");
+                    ns.setText("");
+                    qqc.setText("");
+                    nnc.setText("");
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(SQQNN.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //cập nhật thành viên
-            try{
-            Statement sta=SQL.getConnection().createStatement();
-            sta.executeUpdate(sql+sql1);
-            sta.executeUpdate(sql2+sql1);
-            ltb.setText("Sửa thành công!");
-            ttv.setText("");
-            ns.setText("");
-            nnc.setText("");
-            qqc.setText("");
-            } catch (SQLException ex) {
-//              Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
-              ltb.setText("Sửa thát bại");
-            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SQQNN.class.getName()).log(Level.SEVERE, null, ex);
+            Bxacnhan.setEnabled(false);
+            Csqq.setEnabled(false);
+            Csnn.setEnabled(false);
         }
+    }
+    
+    
+    private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
+        // TODO add your handling code here:
+        //Khai báo câu lệnh update
+        String sql = "update TV set QQ = ?,NN = ?";
+        String sql2 = " where ID like ?";
+        
+            try{
+                PreparedStatement sta=SQL.getConnection().prepareStatement(sql+sql2);
+                //Thực hiện lệnh update
+                sta.setString(1, Csqq.getSelectedItem().toString());
+                sta.setString(2, Csnn.getSelectedItem().toString());
+                sta.setString(3, matv.getText());
+                sta.executeUpdate();
+                qqc.setText(Csqq.getSelectedItem().toString());
+                nnc.setText(Csnn.getSelectedItem().toString());
+                //Xuất thông báo sau khi update
+                ltb.setText("Sửa thành công!");
+            } catch (SQLException ex) {
+                Logger.getLogger(SMT.class.getName()).log(Level.SEVERE, null, ex);
+                //Xuất thông báo khi quá trình update gặp lỗi
+                ltb.setText("Sửa thát bại");
+            }
     }//GEN-LAST:event_BxacnhanActionPerformed
 
     private void matvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matvActionPerformed
@@ -280,44 +314,24 @@ public class SQQNN extends javax.swing.JInternalFrame {
 
     private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
         // TODO add your handling code here:
+        if(evt.getKeyChar()==65535 || edit==false){
+            return;
+        }
         if(evt.getKeyChar()==KeyEvent.VK_ENTER){
-            String a="select HVT,NS,QQ,NN from TV where ID like '" + matv.getText() + "'";
-            ResultSet res = null;
-            Statement sta;
-            
-            if(matv.getText().isEmpty())
-            {
-                ltb.setText("Hãy nhập mã thành viên!");
-                Csqq.setEnabled(false);
-                Csnn.setEnabled(false);
-            }
-            else
-            {
-                try {
-                    sta=SQL.getConnection().createStatement();
-                    res=sta.executeQuery(a);
-                    if(res.next()==true){
-                        ttv.setText(res.getString(1));
-                        ns.setText(res.getString(2));
-                        nnc.setText(res.getString(3));
-                        qqc.setText(res.getString(4));
-                        ltb.setText("");
-                    }
-                    else{
-                        ttv.setText("");
-                        ns.setText("");
-                        nnc.setText("");
-                        qqc.setText("");
-                        ltb.setText("Không tìm thấy người này!");
-                        ltb.setVisible(true);
-                        Csqq.setEnabled(false);
-                        Csnn.setEnabled(false);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(SQQNN.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
+            LoadData(matv.getText());
+            return;
+        }
+        
+        if(matv.getText().length()==6||matv.getText().length()==7){
+            LoadData(matv.getText()+evt.getKeyChar());
+        } else {
+            ttv.setText("");
+            ns.setText("");
+            nnc.setText("");
+            qqc.setText("");
+            Csnn.setEnabled(false);
+            Csqq.setEnabled(false);
+            Bxacnhan.setEnabled(false);
         }
     }//GEN-LAST:event_matvKeyPressed
 

@@ -9,7 +9,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import javax.xml.bind.annotation.XmlElement;
 
 
 /**
@@ -18,12 +17,13 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class TGTV extends javax.swing.JInternalFrame {
         String a[]=new String[]{"STT","Năm","Số lượng sinh","Số lượng kết hôn","Số lượng mất"};
-        DefaultTableModel tb=new DefaultTableModel(a,0);
+        DefaultTableModel tb;
     /**
      * Creates new form TGTV_1
      */
     public TGTV() {
         initComponents();
+        tb=(DefaultTableModel) TK.getModel();
         setVisible(true);
     }
 
@@ -87,7 +87,17 @@ public class TGTV extends javax.swing.JInternalFrame {
             new String [] {
                 "STT", "Năm", "Số lượng sinh", "Số lượng kết hôn", "Số lượng mất"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TK.setEditingColumn(0);
+        TK.setEditingRow(0);
         jScrollPane1.setViewportView(TK);
 
         jButton1.setText("Tìm");
@@ -183,9 +193,18 @@ public class TGTV extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-            try {                                      
+        int begin=0;
+        int end=9999;
+        if(!tunam.getText().isEmpty()){
+            begin=Integer.valueOf(tunam.getText());
+        }
+        if(!dennam.getText().isEmpty()){
+            end=Integer.valueOf(dennam.getText());
+        }
+        try {                                      
                 // TODO add your handling code here:
-                if(Integer.valueOf(tunam.getText()) > Integer.valueOf(dennam.getText())){
+                tb.setRowCount(0);
+                if(begin > end){
                     jLabel4.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
                     jLabel4.setVisible(true);
                     return;
@@ -193,20 +212,17 @@ public class TGTV extends javax.swing.JInternalFrame {
                 jLabel4.setVisible(false);
                 PreparedStatement pr;
                 ResultSet re;
-                String select="SELECT * FROM FUNC_TKNAM (?,?)";
+                String select="SELECT NAM,sum(SLS),sum(SLKH),sum(SLC) FROM FUNC_TKNAM (?,?) GROUP BY NAM ORDER BY NAM";
                 pr=SQL.getConnection().prepareStatement(select);
                 try {
-                    pr.setInt(1, Integer.valueOf(tunam.getText()));
-                    pr.setInt(2,Integer.valueOf(dennam.getText()));
+                    pr.setInt(1, begin);
+                    pr.setInt(2,end);
                     re=pr.executeQuery();//thực hiện câu lệnh có trả về
-                    tb.setRowCount(0);// dòng = 0
-                    
                     if(re.isBeforeFirst()){
                         // vector giá trị ko biết đc
                         Vector a;
                         int i=1;
                         //chèn dòng đếm
-                        tb.setRowCount(0);
                         while(re.next()){
                             a=new Vector();
                             a.add(i);
@@ -240,7 +256,7 @@ public class TGTV extends javax.swing.JInternalFrame {
         int limit=nam.length();
         if(chr==65535 || chr==127 || chr==27 || chr==10){
             return;
-        }  
+        }
         if(chr==8){
             if((limit-1)<1 || (limit-1)==4){
                 jLabel4.setVisible(false);

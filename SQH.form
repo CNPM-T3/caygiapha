@@ -191,6 +191,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="ttv">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ttvActionPerformed"/>
       </Events>
@@ -201,6 +204,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="ns">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nsActionPerformed"/>
       </Events>
@@ -211,6 +217,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="ttvc">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ttvcActionPerformed"/>
       </Events>
@@ -221,6 +230,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="qhc">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="qhcActionPerformed"/>
       </Events>

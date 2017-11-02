@@ -153,11 +153,10 @@
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="                     "/>
-            <StringItem index="1" value="TP.H&#x1ed3; Ch&#xed; Minh"/>
-            <StringItem index="2" value="TP.&#x110;&#xe0; N&#x1eb5;ng"/>
-            <StringItem index="3" value="TP.H&#xe0; N&#xf4;i"/>
+          <StringArray count="3">
+            <StringItem index="0" value="TP.H&#x1ed3; Ch&#xed; Minh"/>
+            <StringItem index="1" value="TP.&#x110;&#xe0; N&#x1eb5;ng"/>
+            <StringItem index="2" value="TP.H&#xe0; N&#xf4;i"/>
           </StringArray>
         </Property>
       </Properties>
@@ -174,21 +173,20 @@
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="14">
-            <StringItem index="0" value="                 "/>
-            <StringItem index="1" value="B&#x1ec7;nh Lao"/>
-            <StringItem index="2" value="Ung Th&#x1b0;"/>
-            <StringItem index="3" value="Ch&#x1ea5;n Th&#x1b0;&#x1a1;ng S&#x1ecd; N&#xe3;o"/>
-            <StringItem index="4" value="Tai N&#x1ea1;n Xe C&#x1ed9;"/>
-            <StringItem index="5" value="B&#x1ec7;nh Gan"/>
-            <StringItem index="6" value="B&#x1ec7;nh Ph&#x1ed5;i"/>
-            <StringItem index="7" value="&#x110;&#x1ed9;t Qu&#x1ef5;"/>
-            <StringItem index="8" value="B&#x1ec7;nh Tim"/>
-            <StringItem index="9" value="Kh&#xe1;ng Chi&#x1ebf;n"/>
-            <StringItem index="10" value="B&#x1ec7;nh HIV"/>
-            <StringItem index="11" value="B&#x1ec7;nh S&#x1ed1;t Xu&#x1ea5;t Huy&#x1ebf;t"/>
-            <StringItem index="12" value="B&#x1ec7;nh H5N1"/>
-            <StringItem index="13" value=" "/>
+          <StringArray count="13">
+            <StringItem index="0" value="B&#x1ec7;nh Lao"/>
+            <StringItem index="1" value="Ung Th&#x1b0;"/>
+            <StringItem index="2" value="Ch&#x1ea5;n Th&#x1b0;&#x1a1;ng S&#x1ecd; N&#xe3;o"/>
+            <StringItem index="3" value="Tai N&#x1ea1;n Xe C&#x1ed9;"/>
+            <StringItem index="4" value="B&#x1ec7;nh Gan"/>
+            <StringItem index="5" value="B&#x1ec7;nh Ph&#x1ed5;i"/>
+            <StringItem index="6" value="&#x110;&#x1ed9;t Qu&#x1ef5;"/>
+            <StringItem index="7" value="B&#x1ec7;nh Tim"/>
+            <StringItem index="8" value="Kh&#xe1;ng Chi&#x1ebf;n"/>
+            <StringItem index="9" value="B&#x1ec7;nh HIV"/>
+            <StringItem index="10" value="B&#x1ec7;nh S&#x1ed1;t Xu&#x1ea5;t Huy&#x1ebf;t"/>
+            <StringItem index="11" value="B&#x1ec7;nh H5N1"/>
+            <StringItem index="12" value=""/>
           </StringArray>
         </Property>
       </Properties>

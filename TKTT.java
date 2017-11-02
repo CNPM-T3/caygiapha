@@ -183,13 +183,13 @@ public class TKTT extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        int nambd=1700;
+        tb.setRowCount(0);
+        int nambd=0;
         int namkt=9999;
         if(tunam.getText().isEmpty()==false)
             nambd=Integer.valueOf(tunam.getText());
         if(dennam.getText().isEmpty()==false)
             namkt=Integer.valueOf(dennam.getText());
-        tb.setRowCount(0);
         if(nambd > namkt){
             jLabel5.setText("Thông tin không hợp lệ.\nVui lòng kiểm tra lại...");
             jLabel5.setVisible(true);
@@ -198,18 +198,13 @@ public class TKTT extends javax.swing.JInternalFrame {
         jLabel5.setVisible(false);
         PreparedStatement pre;
         ResultSet res;
-        String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT  ";
+        String select="select LTT,count (ID) from TT where year(NPS)>=? and year(NPS)<=? group by LTT ";
         try {
             pre=SQL.getConnection().prepareStatement(select);
             //nhập năm của khung 1-2
-            pre.setString(1, tunam.getText());
-            pre.setString(2, dennam.getText());
+            pre.setInt(1, nambd);
+            pre.setInt(2, namkt);
             res=pre.executeQuery();
-            select.compareTo(select);
-            if(res.isBeforeFirst()==false){
-                TK.setModel(tb);
-                return;
-            }
             //nếu giá trị trước đó ko có trước đó
             if(res.isBeforeFirst()){
                 // vector giá trị ko biết đc

@@ -19,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author ADT
  */
 public class ADD_KT extends javax.swing.JInternalFrame {
+    
     private final String head[]={"STT","Họ và tên","Ngày sinh","Đời","Cha/mẹ"};
+    
     private final DefaultTableModel tb= new DefaultTableModel(head,0);
     private String[] data;
     /**
@@ -37,27 +39,24 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         timtc.setVisible(false);
         them.setEnabled(false);
         baoloi.setVisible(false);
-        boolean edit=true;
         Date n=new Date();
-        if(Bridge.isOpen()){
-            String[] data=Bridge.getData();
-            matv.setText(data[0]);
-            hovaten.setText(data[1]);
-            ngaysinh.setText(data[2]);
-            matv.setEditable(false);
-            boolean x=Search_KT();
-            tim.setEnabled(false);
-            edit=false;
-            if(x){
-                timtc.setText("Thành viên này đã có giấy khai tử");
-                timtc.setVisible(true);
-            } else {
-                them.setEnabled(true);
-            }
-        }
         setVisible(true);
     }
 
+    public ADD_KT(String ma){
+        initComponents();
+        hovaten.setEditable(false);
+        ngaysinh.setEditable(false);
+        timtc.setVisible(false);
+        baoloi.setVisible(false);
+        Date n=new Date();
+        matv.setText(ma);
+        matv.setEditable(false);
+        Search_KT(matv.getText());
+        tim.setEnabled(false);
+        setVisible(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -259,7 +258,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                                 .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(99, 99, 99)
                                 .addComponent(tim, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 71, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(timtc)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -335,58 +334,38 @@ public class ADD_KT extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_timMouseClicked
 
-    private boolean Search_KT(){
+
+    
+    private void Search_KT(String ma){
         try {
-            String SQL2="select id from KT where id like '"+matv.getText()+"'";
-            ResultSet r1=SQL.getConnection().createStatement().executeQuery(SQL2);
-            return r1.isBeforeFirst();
+            String SQL1="select HVT,NS from KT where id like '"+ma+"'";
+            String SQL2="select * from KT where ID like '"+ma+"'";
+            Statement sta=SQL.getConnection().createStatement();
+            ResultSet r1=sta.executeQuery(SQL1);
+            if(r1.isBeforeFirst()){
+                r1.next();
+                hovaten.setText(r1.getString("HVT"));
+                ngaysinh.setText(r1.getString("NS"));
+                timtc.setText("ĐÃ TÌM THẤY THÀNH VIÊN");
+                r1=sta.executeQuery(SQL2);
+                if(r1.isBeforeFirst()){
+                    timtc.setText("Thành viên này đã có giấy khai tử.");
+                    them.setEnabled(false);
+                } else {
+                    them.setEnabled(true);
+                }
+            } else {
+                timtc.setText("Không tìm thấy thành viên này.");
+                them.setEnabled(false);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
     }
     
     private void timActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timActionPerformed
         // TODO add your handling code here:
-        Statement a;
-        ResultSet r,r1;
-        //tìm thông tin của thành viên được nhập
-        String SQL1="select hvt, ns, id "
-                + "from tv where id like '"+ matv.getText()+"'";
-        //tìm id của những người đã có giấy khai tử
-        String SQL2="select id from KT where id like '"+matv.getText()+"'";
-        try {
-              a=SQL.getConnection().createStatement();
-              r=a.executeQuery(SQL1);
-              /*
-              nếu tìm thấy thành viên
-              điền họ tên và ngày sinh
-              hiện thông báo và mở nút thêm
-              */
-              if(r.isBeforeFirst()==true){
-                r.next();
-                hovaten.setText(r.getString(1));
-                ngaysinh.setText(r.getString(2));
-                timtc.setText("Đã tìm thấy thành viên");
-                timtc.setVisible(true);
-                them.setEnabled(true);
-              }
-              //nếu không thấy thành viên
-              else {
-                  timtc.setText("Không tìm thấy thành viên");
-                  timtc.setVisible(true);
-                  them.setEnabled(false);
-              }
-              r1=a.executeQuery(SQL2);
-              //nếu đã có giấy khai tử
-              if(Search_KT()){
-                    timtc.setText("Thành viên này đã có giấy khai tử");
-                    them.setEnabled(false);
-              }
-         }
-          catch (SQLException ex) {
-              Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
-          }
+        Search_KT(matv.getText());
 
     }//GEN-LAST:event_timActionPerformed
 
@@ -434,11 +413,6 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_themActionPerformed
 
-    private void dongloiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dongloiActionPerformed
-        textloi.setText("Không tìm thấy thành viên");
-        baoloi.dispose();        // TODO add your handling code here:
-    }//GEN-LAST:event_dongloiActionPerformed
-
     private void matvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matvKeyPressed
         // TODO add your handling code here:
         if(!edit)
@@ -448,50 +422,23 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         if(chr==65535 || chr==KeyEvent.VK_DELETE || chr==KeyEvent.VK_BACK_SPACE){
             return;
         }
+        
+        if(chr==KeyEvent.VK_ENTER){
+            Search_KT(matv.getText());
+            return;
+        }
+        
         String id= matv.getText();
         int len=id.length();
         if(len==6 || len==7){
-            Statement a;
-            ResultSet r,r1;
-        //tìm thông tin của thành viên được nhập
-            String SQL1="select hvt, ns, id "
-                + "from tv where id like '"+ matv.getText()+"'";
-        //tìm id của những người đã có giấy khai tử
-            String SQL2="select id from KT where id like '"+matv.getText()+"'";
-            try {
-                a=SQL.getConnection().createStatement();
-                r=a.executeQuery(SQL1);
-              /*
-              nếu tìm thấy thành viên
-              điền họ tên và ngày sinh
-              hiện thông báo và mở nút thêm
-              */
-                if(r.isBeforeFirst()==true){
-                    r.next();
-                    hovaten.setText(r.getString(1));
-                    ngaysinh.setText(r.getString(2));
-                    timtc.setText("Đã tìm thấy thành viên");
-                    timtc.setVisible(true);
-                    them.setEnabled(true);
-                }
-              //nếu không thấy thành viên
-                else {
-                    timtc.setText("Không tìm thấy thành viên");
-                    timtc.setVisible(true);
-                    them.setEnabled(false);
-                }
-                r1=a.executeQuery(SQL2);
-              //nếu đã có giấy khai tử
-                if(Search_KT()){
-                    timtc.setText("Thành viên này đã có giấy khai tử");
-                    them.setEnabled(false);
-                }
-            }
-            catch (SQLException ex) {
-                Logger.getLogger(ADD_KT.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Search_KT(matv.getText()+evt.getKeyChar());
         }
     }//GEN-LAST:event_matvKeyPressed
+
+    private void dongloiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dongloiActionPerformed
+        textloi.setText("Không tìm thấy thành viên");
+        baoloi.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_dongloiActionPerformed
 
 
 
