@@ -6,6 +6,7 @@
 package caygiapha;
 
 import java.awt.event.KeyEvent;
+import java.beans.PropertyVetoException;
 import java.sql.SQLException;
 import java.sql.*;
 import java.text.DateFormat;
@@ -25,9 +26,11 @@ public class SQH extends javax.swing.JInternalFrame {
      */
     private String nstvc;
     private String gt;
+    boolean visible=true;
     DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
     public SQH() {
         initComponents();
+        Bxacnhan.setEnabled(false);
 //        ttv.setEditable(false);
 //        ns.setEditable(false);
 //        ttvc.setEditable(false);
@@ -39,8 +42,9 @@ public class SQH extends javax.swing.JInternalFrame {
         initComponents();
         matv.setText(ma);
         matv.setEditable(false);
+        Bxacnhan.setEnabled(true);
         Search(matv.getText());
-        setVisible(true);
+        setVisible(visible);
     }
     
     /**
@@ -52,6 +56,9 @@ public class SQH extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         Cqh = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
@@ -67,6 +74,47 @@ public class SQH extends javax.swing.JInternalFrame {
         ttvc = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         qhc = new javax.swing.JTextField();
+
+        jDialog1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialog1.setAlwaysOnTop(true);
+        jDialog1.setMinimumSize(new java.awt.Dimension(400, 96));
+        jDialog1.setName("Thông báo"); // NOI18N
+        jDialog1.setResizable(false);
+        jDialog1.setSize(new java.awt.Dimension(400, 96));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Không tìm thấy quan hệ của thành viên này");
+
+        jButton1.setText("Đồng ý");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setClosable(true);
         setTitle("Sửa quan hệ");
@@ -227,17 +275,24 @@ public class SQH extends javax.swing.JInternalFrame {
 
     private void Search(String ma){
         String cmd="select T.HVT,T.NS,T1.HVT,QH,T1.NS,T.GT from TV T left outer join QH Q on T.ID=Q.ID left outer join TV T1 on ID_O=T1.ID where T.ID like ?";
-        try(PreparedStatement pre=SQL.getConnection().prepareStatement(cmd)) {
+        try {
+            PreparedStatement pre=SQL.getConnection().prepareStatement(cmd);
             pre.setString(1, ma);
             ResultSet r=pre.executeQuery();
             if(r.next()==true){
-                    ttv.setText(r.getString(1));
-                    ns.setText(df.format(r.getDate(2)));
-                    ttvc.setText(r.getString(3));
-                    qhc.setText(r.getString(4));
-                    nstvc=df.format(r.getDate(5));
-                    gt=r.getString(6);
-                    ltb.setText("");
+                    if(r.getDate(5)==null){
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thành viên cũ.","Lỗi",1);
+                        visible=false;
+                        dispose();
+                    } else {
+                        ttv.setText(r.getString(1));
+                        ns.setText(df.format(r.getDate(2)));
+                        ttvc.setText(r.getString(3));
+                        qhc.setText(r.getString(4));
+                        nstvc=df.format(r.getDate(5));
+                        gt=r.getString(6);
+                        ltb.setText("");
+                    }
                 }else{
                     ttv.setText("");
                     ns.setText("");
@@ -270,6 +325,10 @@ public class SQH extends javax.swing.JInternalFrame {
     
     private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
         // TODO add your handling code here:
+        if(!Bxacnhan.isEnabled()) {
+            return;
+        }
+        
         if(CheckYear() && Cqh.getSelectedIndex()==2){
             JOptionPane.showMessageDialog(this, "Cha/mẹ phải hơn con tối thiểu 15 tuổi.","Lỗi",1);
             return;
@@ -355,10 +414,18 @@ public class SQH extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_matvKeyPressed
 
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+        jDialog1.dispose();
+    }//GEN-LAST:event_jButton1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bxacnhan;
     private javax.swing.JComboBox<String> Cqh;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -366,6 +433,7 @@ public class SQH extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel ltb;
     private javax.swing.JTextField matv;
     private javax.swing.JTextField ns;

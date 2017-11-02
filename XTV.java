@@ -475,7 +475,8 @@ public class XTV extends javax.swing.JInternalFrame {
             String a = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
             MAIN.a.getJDesktop().add(new SQH(a));
         } catch (Exception e) {
-            Error();
+            Logger.getLogger(XTV.class.getCanonicalName()).log(Level.SEVERE, null, e);
+//            Error();
         }
     }//GEN-LAST:event_But_SQHMouseClicked
 

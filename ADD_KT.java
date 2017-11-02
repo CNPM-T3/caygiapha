@@ -338,7 +338,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     
     private void Search_KT(String ma){
         try {
-            String SQL1="select HVT,NS from KT where id like '"+ma+"'";
+            String SQL1="select HVT,NS from TV where id like '"+ma+"'";
             String SQL2="select * from KT where ID like '"+ma+"'";
             Statement sta=SQL.getConnection().createStatement();
             ResultSet r1=sta.executeQuery(SQL1);

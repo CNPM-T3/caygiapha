@@ -31,6 +31,7 @@ public class XTT extends javax.swing.JInternalFrame {
     public XTT() {
         initComponents();
         tb= (DefaultTableModel) dsTT.getModel();
+        But_ADDTT.setEnabled(false);
         setVisible(true);
     }
     public XTT(String ma){
@@ -40,6 +41,7 @@ public class XTT extends javax.swing.JInternalFrame {
         Txt_ID.setText(ma1);
         Txt_ID.setEditable(false);
         Search_TV(Txt_ID.getText());
+        But_ADDTT.setEnabled(true);
         edit=false;
         setVisible(true);
     }
@@ -338,8 +340,10 @@ public class XTT extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 //        data=new String[]{Txt_ID.getText()};
 //        Bridge.setData(data);
-        String a=new String(Txt_ID.getText());
-        MAIN.a.getJDesktop().add(new ADD_TT(a));
+        if(But_ADDTT.isEnabled()){
+            String a=new String(Txt_ID.getText());
+            MAIN.a.getJDesktop().add(new ADD_TT(a));
+        }
     }//GEN-LAST:event_But_ADDTTMouseClicked
 
     private void Txt_IDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Txt_IDKeyPressed

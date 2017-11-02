@@ -602,7 +602,11 @@ public class ADD_TV extends javax.swing.JInternalFrame {
     }
     
     private void But_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_But_ThemActionPerformed
-            try {
+        if(!But_Them.isEnabled()){
+            return;
+        }
+                
+        try {
                 String cmd ="insert into TV values (?,?,?,?,?,?,?,N'') insert into QH values (?,?,?,?,N'')";
                 String ns=C_NgayS.getSelectedItem().toString()+"/"+C_ThangS.getSelectedItem().toString()+"/"+Tx_NamS.getText();
                 if(C_QuanHe.getSelectedIndex()==3 && Check_Year(ns)) {

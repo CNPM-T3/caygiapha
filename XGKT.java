@@ -281,6 +281,10 @@ public class XGKT extends javax.swing.JInternalFrame {
 
     private void But_ADD_KTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_But_ADD_KTMouseClicked
         // TODO add your handling code here:
+        if(!But_ADD_KT.isEnabled()){
+            return;
+        }
+            
         int len=Txt_MaTV.getText().length();
         if(len<7||len>8) {
             JOptionPane.showMessageDialog(this, "Mã thành viên không hợp lệ!","Lỗi",1);

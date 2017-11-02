@@ -37,9 +37,11 @@ public class ADD_TT extends javax.swing.JInternalFrame {
         ngay.setText(df.format(date));
         model = (DefaultTableModel) bang.getModel();
         model.setRowCount(0);
+        hoVaTen.setEditable(false);
+        ngaySinh.setEditable(false);
+        BThem.setEnabled(false);
         setVisible(true);
-        hoVaTen.setEnabled(false);
-        ngaySinh.setEnabled(false);
+
     }
     
     public ADD_TT(String ma){
@@ -283,10 +285,11 @@ public class ADD_TT extends javax.swing.JInternalFrame {
             } else {
                 hoVaTen.setText("");
                 ngaySinh.setText("");
-                BThem.setEnabled(true);
+                BThem.setEnabled(false);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ADD_TT.class.getName()).log(Level.SEVERE, null, ex);
+            BThem.setEnabled(false);
         }
     }
     
@@ -328,6 +331,10 @@ public class ADD_TT extends javax.swing.JInternalFrame {
     
     private void BThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BThemActionPerformed
                 // TODO add your handling code here
+                if(!BThem.isEnabled()){
+                    return;
+                }
+                
                 if(Check_Date()){
                     JOptionPane.showMessageDialog(this, "Ngày phát sinh không hợp lê!","Lỗi",1);
                     return;

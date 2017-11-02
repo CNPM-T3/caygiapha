@@ -40,6 +40,7 @@ public class SQQNN extends javax.swing.JInternalFrame {
         qqc.setEditable(false);
         matv.setText(ma);
         matv.setEditable(false);
+        Bxacnhan.setEnabled(true);
         edit=false;
         LoadData(matv.getText());
         setVisible(true);
@@ -270,6 +271,10 @@ public class SQQNN extends javax.swing.JInternalFrame {
     
     private void BxacnhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BxacnhanActionPerformed
         // TODO add your handling code here:
+        if(!Bxacnhan.isEnabled()){
+            return;
+        }
+        
         //Khai báo câu lệnh update
         String sql = "update TV set QQ = ?,NN = ?";
         String sql2 = " where ID like ?";
