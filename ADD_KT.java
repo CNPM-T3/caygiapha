@@ -88,6 +88,9 @@ public class ADD_KT extends javax.swing.JInternalFrame {
         timtc = new javax.swing.JLabel();
         diadiemmaitang = new javax.swing.JComboBox<>();
         nguyennhanmat = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         baoloi.setTitle("không tìm thấy");
         baoloi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -206,6 +209,12 @@ public class ADD_KT extends javax.swing.JInternalFrame {
 
         nguyennhanmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Bệnh Lao", "Ung Thư", "Chấn Thương Sọ Não", "Tai Nạn Xe Cộ", "Bệnh Gan", "Bệnh Phổi", "Đột Quỵ", "Bệnh Tim", "Kháng Chiến", "Bệnh HIV", "Bệnh Sốt Xuất Huyết", "Bệnh H5N1", " " }));
 
+        jLabel1.setText("Năm");
+
+        jLabel2.setText("Tháng");
+
+        jLabel3.setText("Ngày");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -227,10 +236,16 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(74, 74, 74)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(nammat, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(diadiemmaitang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -258,7 +273,7 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                                 .addComponent(ngaysinh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(99, 99, 99)
                                 .addComponent(tim, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 10, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(timtc)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -290,7 +305,10 @@ public class ADD_KT extends javax.swing.JInternalFrame {
                             .addComponent(ngaymat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(thangmat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nammat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(L_ngaymat))
+                            .addComponent(L_ngaymat)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6))
                     .addComponent(diadiemmaitang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -452,6 +470,9 @@ public class ADD_KT extends javax.swing.JInternalFrame {
     private javax.swing.JButton dong;
     private javax.swing.JButton dongloi;
     private javax.swing.JTextField hovaten;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField matv;
